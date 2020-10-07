@@ -16,8 +16,17 @@
         <input type="text" name="username">
         <input type="text" name="message">
         </br>
-        <button type="button" name="download">Download Chat Files</button>
-        <button type="submit" name="send">Send</button>
+        <button type="button" name="send">Send</button>
+    </form>
+
+    <form action="/ChatServlet" method="GET">
+        <label> Download Chat file
+            <select name = "format">
+                <option value = "txt">TXT</option>
+                <option value = "xml">XML</option>
+            </select>
+        </label>
+        <button type="button" name="download">Download Chat File</button>
     </form>
 </body>
 </html>
