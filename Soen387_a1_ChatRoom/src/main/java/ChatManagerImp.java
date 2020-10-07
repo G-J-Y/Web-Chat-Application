@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ChatManagerImp implements ChatManager{
-    private LinkedList<Message> messagesStore = new LinkedList<>();
-    public LinkedList<Message> getMessagesStore(){
+
+    private ArrayList<Message> messagesStore = new ArrayList<>();
+
+    public ArrayList<Message> getMessagesStore(){
         return this.messagesStore;
     }
     @Override
@@ -18,7 +21,7 @@ public class ChatManagerImp implements ChatManager{
         if(start == "" && end == "") return messagesStore;
         if(start == "") start = "1900/00/00 00:00:00";
         if(end == "") end = "2050/12/30 00:00:00";
-        LinkedList<Message> filteredMessages = new LinkedList<>();
+        ArrayList<Message> filteredMessages = new ArrayList<>();
         //Here need to Lambda expression
         for(Message message : messagesStore){
             if(message.compareTo((Object)start) >= 0 && message.compareTo((Object)end) <= 0)
@@ -35,7 +38,7 @@ public class ChatManagerImp implements ChatManager{
         }
         if(start == "") start = "1900/01/01 00:00:00";
         if(end == "") end = "2080/01/01 00:00:00";
-        LinkedList<Message> filteredMessages = new LinkedList<>();
+        ArrayList<Message> filteredMessages = new ArrayList<>();
         for(Message message : messagesStore){
             if(message.compareTo((Object)start) < 0 || message.compareTo((Object)end) > 0)
                 filteredMessages.add(message);
