@@ -12,21 +12,25 @@ public class ChatServlet extends HttpServlet {
 
     private ChatManagerImp chatManager = new ChatManagerImp();
     ArrayList<Message> chatlist;
-    List<Message> filteredMessages;
+    public String chat_record = "";
+    //List<Message> filteredMessages;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         //get username
         String name = request.getParameter("username");
         //get message
-        String message = request.getParameter("message");
+        String message = request.getParameter("inputText");
         //store message
         chatManager.postMessage(name, message);
-
         chatlist = chatManager.getMessagesStore();
 
-        PrintWriter out = response.getWriter();
+        chat_record += name + ": " + message + " " + "\n";
 
+        request.setAttribute("inputText", chat_record);
+        request.getRequestDispatcher("chat.jsp").forward(request,response);
+
+        /*PrintWriter out = response.getWriter();
         out.println("<HTML>");
         out.println("<body>");
         if(chatlist!=null)
@@ -38,18 +42,17 @@ public class ChatServlet extends HttpServlet {
             }
         }
         out.println("</body>");
-        out.println("</HTML>");
+        out.println("</HTML>");*/
 
-        //request.getServletContext().setAttribute("chatlist", chatlist);
+
         //response.getWriter().println(message);
-
         //response.sendRedirect("/chat.jsp");
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String filename = "Chat Record.txt";
+        doPost(request,response);
+        /*String filename = "Chat Record.txt";
         String filePath = getServletContext().getRealPath(filename);
 
         File file = new File(filePath);
@@ -68,7 +71,7 @@ public class ChatServlet extends HttpServlet {
         }
 
         fileInputStream.close();
-        outputStream.close();
+        outputStream.close();*/
 
         /*int i = 0;
         while (!filteredMessages.isEmpty()) {

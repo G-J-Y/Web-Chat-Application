@@ -12,14 +12,18 @@
 </head>
 <body>
     <h1>Welcome to Concordia Chat Room</h1>
-    <form action="/ChatServlet" method="POST">
-        <input type="text" name="username">
-        <input type="text" name="message">
-        </br>
-        <button type="button" name="send">Send</button>
+    <form action="ChatServlet" method="POST">
+        <textarea  cols="100" rows="10" name="showTextArea"><%=request.getAttribute("inputText")%></textarea>
+        <br>
+        <label>User name:</label>
+        <input type="text" name="username" size="10">
+        <br>
+        <textarea  cols="80" rows="5"  name="inputText"></textarea>
+        <br>
+        <button type="submit" name="send" style="width: 100px; height: 40px;font-size: 25px;">Send</button><br>
     </form>
 
-    <form action="/ChatServlet" method="GET">
+    <form action="ChatServlet" method="GET">
         <label> Download Chat file
             <select name = "format">
                 <option value = "txt">TXT</option>
