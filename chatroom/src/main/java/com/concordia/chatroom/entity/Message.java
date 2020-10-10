@@ -16,7 +16,7 @@ public class Message implements Comparable{
     public Message() {
     }
 
-    public Message(String content, String user) {
+    public Message(String user, String content) {
         this.content = content;
         this.user = user;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -61,7 +61,7 @@ public class Message implements Comparable{
                 "content='" + content + '\'' +
                 ", user='" + user + '\'' +
                 ", date=" + date +
-                '}';
+                "}";
     }
 
     @Override

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Message Recording</title>
+</head>
+<body>
+
+<!--<h1>The Chat Room</h1>-->
+
+<h1 th:text="${chatRoomName}"></h1>
+
+<!--<table cellspacing="0" cellpadding="0" border="1" style="width:750px; margin:5px auto;">-->
+<!--border-collapse: collapse;height:100px;-->
+<table cellspacing="0" cellpadding="0" style="width:39.5%; border: 1px solid black;" >
+    <tr th:each="message : ${messages}">
+        <td style="width:21%;font-weight:normal;text-align:center;" th:text="${message.user}"></td>
+        <td th:text="${message.date}"></td>
+        <td th:text="${message.content}"></td>
+    </tr>
+</table>
+<br>
+
+
+
+<div>
+    <form th:action="@{/message}" th:method="post">
+        <!--Your message: <input type="text" name="message" value=""/>-->
+        <!--Your name: <input type="text" name="username" value=""/>-->
+        <!--<input type="submit" name="submit" value="Send"/>-->
+
+        <textarea  cols="80" rows="15" name="showTextArea"></textarea>
+        <br>
+        <textarea  placeholder="Type your message..." cols="80" rows="5"  name="message"></textarea>
+        <br>
+        <input type="text" name="username" value="" placeholder="Type your name"/>
+        <br><br>
+        <button type="submit" name="send" style="width: 80px; height: 30px;font-size: 16px;">Send</button><br><br>
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/download}" th:method="GET">
+        <label> Download Your Chat File<br>
+            From<input type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
+            to<input type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/>
+            <select name = "format">
+                <option value = "txt">TXT</option>
+                <option value = "xml">XML</option>
+            </select>
+        </label>
+        <button type="submit" name="download" style="width: 80px; height: 30px;font-size: 14px;">Download</button>
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/clear}" th:method="GET">
+        <label> Clear Your Chat History<br>
+            From<input type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
+            to<input type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/>
+        </label>
+        <button type="submit" name="clear" style="width: 80px; height: 30px;font-size: 14px;">Clear</button>
+    </form>
+</div>
+
+</body>
+</html>
