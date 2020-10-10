@@ -21,26 +21,24 @@
 </table>
 <br>
 
-
-
 <div>
     <form th:action="@{/message}" th:method="post">
-        <!--Your message: <input type="text" name="message" value=""/>-->
-        <!--Your name: <input type="text" name="username" value=""/>-->
-        <!--<input type="submit" name="submit" value="Send"/>-->
-
-        <textarea  cols="80" rows="15" name="showTextArea"></textarea>
-        <br>
+        <!--<textarea  cols="80" rows="15" name="showTextArea"></textarea>
+        <br>-->
         <textarea  placeholder="Type your message..." cols="80" rows="5"  name="message"></textarea>
         <br>
         <input type="text" name="username" value="" placeholder="Type your name"/>
         <br><br>
-        <button type="submit" name="send" style="width: 80px; height: 30px;font-size: 16px;">Send</button><br><br>
+        <button type="submit" name="send" style="width: 80px; height: 30px;font-size: 16px;">Send</button>
+    </form><br>
+    <form th:action="@{/refresh}" th:method="get">
+        <button type="submit" name="refresh" style="width: 80px; height: 30px;font-size: 16px;">Refresh</button><br>
     </form>
 </div>
 
 <div>
     <form th:action="@{/download}" th:method="GET">
+        <p th:text="${errorMsg1}"></p>
         <label> Download Your Chat File<br>
             From<input type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
             to<input type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/>
@@ -50,11 +48,13 @@
             </select>
         </label>
         <button type="submit" name="download" style="width: 80px; height: 30px;font-size: 14px;">Download</button>
+
     </form>
 </div>
 
 <div>
     <form th:action="@{/clear}" th:method="GET">
+        <p th:text="${errorMsg2}"></p>
         <label> Clear Your Chat History<br>
             From<input type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
             to<input type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/>
