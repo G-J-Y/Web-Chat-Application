@@ -1,14 +1,8 @@
-package com.concordia.chatroom.entity;
-
-import org.springframework.stereotype.Component;
-
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-@Component
 public class Message implements Comparable{
     private String content;
     private String user;
@@ -17,7 +11,7 @@ public class Message implements Comparable{
     public Message() {
     }
 
-    public Message(String user, String content) {
+    public Message(String content, String user) {
         this.content = content;
         this.user = user;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -62,7 +56,7 @@ public class Message implements Comparable{
                 "content='" + content + '\'' +
                 ", user='" + user + '\'' +
                 ", date=" + date +
-                "}";
+                '}';
     }
 
     @Override
@@ -80,8 +74,6 @@ public class Message implements Comparable{
     public int[] strToInt(String date){
         int[] ans = new int[6];
         Date current = new Date();
-        //int year,month,day,hour,minute,second ;
-
         try {
             ans[0] = Integer.valueOf(date.substring(0, 4));
             ans[1] = Integer.valueOf(date.substring(5, 7));
@@ -93,14 +85,16 @@ public class Message implements Comparable{
             System.out.println("Your date input format is invalid, please follow the way like: ");
             System.out.println("yyyy/MM/dd HH:mm:ss");
         }
-        /*//Calendar calender = Calendar.getInstance();
-        //int year = calender.getWeekYear();
-        if(ans[0] < 0 || ans[1] < 1 || ans[1] > 12 || ans[2] < 0 || ans[2] > 31 ||
-           ans[3] < 0 || ans[3] > 24 || ans[4] < 0 || ans[4] > 59 ||ans[5] < 0 || ans[5] >59){
-            //throw new DateTimeException("Invalid Date Time");
-            //System.exit(1);
-        }*/
+        Calendar calender = Calendar.getInstance();
+        int year = calender.getWeekYear();
+        if(ans[0] > year || ans[1] < 1 || ans[1] > 12 || ans[2] < 0 || ans[2] > 31 ||
+                ans[3] < 0 || ans[3] > 24 || ans[4] < 0 || ans[4] > 59 ||ans[5] < 0 || ans[5] >59){
+            System.out.println("Your date input format is invalid, please follow the way like: ");
+            System.out.println("yyyy/MM/dd HH:mm:ss");
+            System.out.println("Your year, month, day, hour, minute and second must follow the real time");
+            System.exit(1);
+        }
+
         return ans;
     }
-
 }
