@@ -1,22 +1,23 @@
 package com.concordia.chatroom.entity;
 
 import org.springframework.stereotype.Component;
-
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 
-@Component
-public class Message implements Comparable{
+@Component // java bean, put this class into spring container and it is unique
+public class Message implements Comparable{ // to compare two date(from year to second)
+
+    // message info
     private String content;
+    // the message sender
     private String user;
+    // the message time
     private String date;
 
     public Message() {
     }
 
+    //constructor to form a message using current time
     public Message(String user, String content) {
         this.content = content;
         this.user = user;
@@ -26,6 +27,7 @@ public class Message implements Comparable{
         this.date = date;
     }
 
+    //constructor using the specific time
     public Message(String content, String user, String date) {
         this.content = content;
         this.user = user;
@@ -65,6 +67,7 @@ public class Message implements Comparable{
                 "}";
     }
 
+    // compare the two date
     @Override
     public int compareTo(Object o) {
         String str1 = this.date;
@@ -77,11 +80,9 @@ public class Message implements Comparable{
         }
         return 0;
     }
+    //convert string date to int type which is comparable
     public int[] strToInt(String date){
         int[] ans = new int[6];
-        Date current = new Date();
-        //int year,month,day,hour,minute,second ;
-
         try {
             ans[0] = Integer.valueOf(date.substring(0, 4));
             ans[1] = Integer.valueOf(date.substring(5, 7));
@@ -90,17 +91,8 @@ public class Message implements Comparable{
             ans[4] = Integer.valueOf(date.substring(14, 16));
             ans[5] = Integer.valueOf(date.substring(17, 19));
         }catch(NumberFormatException e){
-            System.out.println("Your date input format is invalid, please follow the way like: ");
-            System.out.println("yyyy/MM/dd HH:mm:ss");
+            System.out.println("The input formate is invalid...");
         }
-        /*//Calendar calender = Calendar.getInstance();
-        //int year = calender.getWeekYear();
-        if(ans[0] < 0 || ans[1] < 1 || ans[1] > 12 || ans[2] < 0 || ans[2] > 31 ||
-           ans[3] < 0 || ans[3] > 24 || ans[4] < 0 || ans[4] > 59 ||ans[5] < 0 || ans[5] >59){
-            //throw new DateTimeException("Invalid Date Time");
-            //System.exit(1);
-        }*/
         return ans;
     }
-
 }

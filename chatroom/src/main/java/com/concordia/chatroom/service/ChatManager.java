@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+// business layer to be implemented
 public interface ChatManager {
 
    void postMessage(String user, String message);
