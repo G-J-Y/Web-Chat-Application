@@ -1,6 +1,7 @@
 package com.concordia.chatroom.controller;
 
 import com.concordia.chatroom.entity.Message;
+import com.concordia.chatroom.service.ChatManager;
 import com.concordia.chatroom.service.ChatManagerImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,54 +19,32 @@ import java.util.Map;
 @Controller
 public class MessageController {
     @Autowired
-    ChatManagerImp chatManager;
-
-    /*@RequestMapping(value = "/getMessages")
-    public String getMessages(@RequestParam(value = "from", required = false) String from,
-                              @RequestParam(value = "to", required = false) String to,
-                              @RequestParam(value = "format", required = false) String format,
-                              Map<String, Object> map) {
-        map.put("recording", new Message("User", "Hello World"));
-        chatManager.listMessages(from, to);
-        chatManager.postMessage("Fred", "I love coding");
-        chatManager.postMessage("Taylor", "Welcome to NewYork");
-        map.put("messages", chatManager.getMessagesStore());
-        return "chatRoom";
-    }*/
+    ChatManager chatManager;
 
     @RequestMapping(value = "/message", method = RequestMethod.POST)
     public String chatRoom(@RequestParam(value = "username", required = false) String user,
                            @RequestParam(value = "message", required = true) String message,
-                           Map<String, Object> map) {
-
+                           Map<String, Object> map,HttpServletRequest request) {
+         if(chatManager.refererBlocked(request)) return "reject";
         if (user == "") user = "anonymous";
         chatManager.postMessage(user, message);
         map.put("messages", chatManager.getMessagesStore());
         map.put("chatRoomName","Concordia");
-        //add
-        /*inputText += user + ": " + message + " " + "\n";
-        request.setAttribute("inputText",inputText);*/
-        //return "chatRoom";
         return "chatRoom";
     }
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
-        //response.setIntHeader("Refresh", 5);
-        /*String referer = request.getHeader("referer");
-        if (referer == null){
-            return "reject";
-        }*/
         return "chatRoom";
     }
-
 
     @RequestMapping(value="/download", method=RequestMethod.GET)
     public String download(@RequestParam(value = "format", required = false) String format,
                            @RequestParam(value = "from", required = false) String from,
                            @RequestParam(value = "to", required = false) String to,
-                           HttpServletResponse  response,
+                           HttpServletResponse  response,HttpServletRequest request,
                            Map<String, Object> map) throws Exception {
+        if(chatManager.refererBlocked(request)) return "reject";
         map.put("chatRoomName","Chat Download");
         if (from == ""){
             from = "1900/01/01 00:00:00";
@@ -76,13 +55,10 @@ public class MessageController {
         if ( chatManager.validateFormat(from) && chatManager.validateFormat(to)) {
             List<Message> chatRecord;
             chatRecord = chatManager.listMessages(from, to);
-            //errorMap.put("errorMsg", "");
-            //download file
             if (format.equals("txt")) {
                 String filename = "Chat Record.txt";
                 response.setContentType("text/plain");
                 response.setHeader("Content-Disposition", "attachment;filename= " + filename);
-
                 PrintWriter out = response.getWriter();
                 Message currentMsg;
 
@@ -123,11 +99,12 @@ public class MessageController {
         }
     }
 
-
     @RequestMapping(value = "/clear",method = RequestMethod.GET)
     public String clear(@RequestParam(value = "from", required = false) String from,
                         @RequestParam(value = "to", required = false) String to,
-                        Map<String, Object> map){
+                        Map<String, Object> map,HttpServletRequest request){
+
+        if(chatManager.refererBlocked(request)) return "reject";
         map.put("chatRoomName","Chat Cleaned");
 
         if (from == ""){
@@ -150,9 +127,10 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/refresh",method = RequestMethod.GET)
-    public String refresh(Map<String, Object> map){
+    public String refresh(Map<String, Object> map,HttpServletRequest request){
         map.put("chatRoomName","Concordia");
         map.put("messages", chatManager.getMessagesStore());
+        if(chatManager.refererBlocked(request)) return "reject";
         return "chatRoom";
     }
 }
