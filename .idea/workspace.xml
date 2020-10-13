@@ -19,7 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cd479e17-ae89-491f-a3d9-b971005ab9a9" name="Default Changelist" comment="Update frontend by using Bootstrap" />
+    <list default="true" id="cd479e17-ae89-491f-a3d9-b971005ab9a9" name="Default Changelist" comment="Update frontend by using Bootstrap">
+      <change afterPath="$PROJECT_DIR$/chatroom/src/main/resources/static/pics/logos/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chatroom/src/main/resources/static/pics/logos/newlogo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chatroom/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chatroom/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chatroom/src/main/resources/templates/chatRoom.html" beforeDir="false" afterPath="$PROJECT_DIR$/chatroom/src/main/resources/templates/chatRoom.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chatroom/target/classes/templates/chatRoom.html" beforeDir="false" afterPath="$PROJECT_DIR$/chatroom/target/classes/templates/chatRoom.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,6 +69,9 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/chatroom/src/main/resources/static/css" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.webOptions" />
   </component>
@@ -98,6 +108,8 @@
       <updated>1602399990459</updated>
       <workItem from="1602399992568" duration="16114000" />
       <workItem from="1602554566059" duration="6504000" />
+      <workItem from="1602573342522" duration="115000" />
+      <workItem from="1602573769241" duration="1923000" />
     </task>
     <task id="LOCAL-00001" summary="Update frontend by using Bootstrap">
       <created>1602573210774</created>
@@ -106,7 +118,21 @@
       <option name="project" value="LOCAL" />
       <updated>1602573210774</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update frontend by using Bootstrap">
+      <created>1602573358796</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1602573358796</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Update frontend by using Bootstrap">
+      <created>1602573438237</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1602573438237</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,6 +148,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -185,18 +212,18 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="255" y="106" key="NewModule_or_Project.wizard/0.0.1280.800@0.0.1280.800" timestamp="1602400532959" />
-    <state x="141" y="39" key="SettingsEditor" timestamp="1602406918072">
+    <state x="141" y="0" key="SettingsEditor" timestamp="1602573448841">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="141" y="39" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1602406918072" />
-    <state x="428" y="321" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602554593814">
+    <state x="141" y="0" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1602573448841" />
+    <state x="428" y="321" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602573433490">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="428" y="321" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.800@0.0.1280.800" timestamp="1602554593814" />
-    <state x="0" y="0" width="1280" height="800" key="dock-window-1" timestamp="1602408522930">
+    <state x="428" y="321" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.800@0.0.1280.800" timestamp="1602573433490" />
+    <state x="0" y="0" width="924" height="800" key="dock-window-1" timestamp="1602574186629">
       <screen x="0" y="23" width="1280" height="777" />
     </state>
-    <state x="0" y="0" width="1280" height="800" key="dock-window-1/0.23.1280.777@0.23.1280.777" timestamp="1602408522929" />
+    <state x="0" y="0" width="924" height="800" key="dock-window-1/0.23.1280.777@0.23.1280.777" timestamp="1602574186629" />
     <state x="305" y="62" width="670" height="676" key="search.everywhere.popup" timestamp="1602410266375">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
