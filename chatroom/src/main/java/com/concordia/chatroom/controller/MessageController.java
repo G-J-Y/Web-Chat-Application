@@ -20,17 +20,17 @@ public class MessageController {
 
     // handle the /message request
     @RequestMapping(value = "/message", method = RequestMethod.POST)
-    public String chatRoom(@RequestParam(value = "username", required = false) String user,
+    public String chatRoom(@RequestParam(value = "username", required = false) String username,
                            @RequestParam(value = "message", required = true) String message,
                            Map<String, Object> map,HttpServletRequest request) {
         //Referer check
-         if(chatManager.refererBlocked(request)) return "reject";
+        //if(chatManager.refererBlocked(request)) return "reject";
 
          //if the username doesn't exit assign it to anonymous
-        if (user == "") user = "anonymous";
+        if (username == "" || username == null) username = "anonymous";
 
         // submit the user's message
-        chatManager.postMessage(user, message);
+        chatManager.postMessage(username, message);
 
         //display all post messages
         map.put("messages", chatManager.getMessagesStore());
@@ -54,16 +54,16 @@ public class MessageController {
                            HttpServletResponse  response,HttpServletRequest request,
                            Map<String, Object> map) throws Exception {
         // Referer check
-        if(chatManager.refererBlocked(request)) return "reject";
+        //if(chatManager.refererBlocked(request)) return "reject";
         // offer a title to this page
         map.put("chatRoomName","Chat Download");
 
         // if start time ignored, we assign a remote time to it
-        if (from == ""){
+        if (from == "" || from == null){
             from = "1900/01/01 00:00:00";
         }
         // if end time ignored, we assign a furture time to it
-        if (to == ""){
+        if (to == "" ||  to == null){
             to = "2050/12/30 00:00:00";
         }
 
@@ -130,16 +130,15 @@ public class MessageController {
                         @RequestParam(value = "to", required = false) String to,
                         Map<String, Object> map,HttpServletRequest request){
         //check Referer
-        if(chatManager.refererBlocked(request)) return "reject";
+        //if(chatManager.refererBlocked(request)) return "reject";
         //give it a proper title
         map.put("chatRoomName","Chat Cleaned");
-
         // if start time is ignored, assign a remote time
-        if (from == ""){
+        if (from == "" || from == null){ //null for curl
             from = "1900/01/01 00:00:00";
         }
         // if end time is ignored, assign a future time
-        if (to == ""){
+        if (to == "" || to == null){ //null for curl
             to = "2050/12/30 00:00:00";
         }
 

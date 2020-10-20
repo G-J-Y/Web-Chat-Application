@@ -43,6 +43,7 @@ public class ChatManagerImp implements ChatManager {
             if(message.compareTo((Object)start) < 0 || message.compareTo((Object)end) > 0)
                 filteredMessages.add(message);
         }
+        System.out.println("*************************clear**********************");
         messagesStore = filteredMessages;
     }
 
