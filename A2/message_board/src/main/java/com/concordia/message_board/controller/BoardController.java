@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.util.Map;
 
 @Controller
@@ -31,8 +33,29 @@ public class BoardController {
                                  Map<String,Object> map, HttpSession session){
 
         System.out.println("Number---->"+number);
-       if(postManager.authentication(username, password)) return "Ok";
+        if(postManager.authentication(username, password)) return "Ok";
 
         return "error";
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String upload(@RequestParam("file") MultipartFile file, Model model){
+        if (file.isEmpty()){
+            model.addAttribute("uploadMessage", "The file is empty!");
+            return "postMessage";
+        }
+        try{
+            //InputStream in = file.getInputStream();
+
+            byte[] bytes = file.getBytes();
+            //Path path = Paths.get("E:\\fileUpload/" + file.getOriginalFilename());
+            Path path = Paths.get("C:\\Users\\Administrator\\Desktop\\SOEN387\\A2\\fileUpload/" + file.getOriginalFilename());
+            Files.write(path, bytes);
+            model.addAttribute("uploadMessage", "success");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "postMessage";
     }
 }
