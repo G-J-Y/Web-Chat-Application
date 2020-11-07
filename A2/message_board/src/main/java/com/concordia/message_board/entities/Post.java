@@ -5,19 +5,23 @@ import java.util.Arrays;
 public class Post {
     private String userId;
     private String postId;
+    private String title;
     private String content;
-    private String date;
+    private String postDate;
+    private String modifiedDate;
     private String[] hashTage;
     private AttachedPost attachedPost;
 
     public Post() {
     }
 
-    public Post(String userId, String postId, String content, String date, String[] hashTage, AttachedPost attachedPost) {
+    public Post(String userId, String postId, String title, String content, String postDate, String modifiedDate, String[] hashTage, AttachedPost attachedPost) {
         this.userId = userId;
         this.postId = postId;
+        this.title = title;
         this.content = content;
-        this.date = date;
+        this.postDate = postDate;
+        this.modifiedDate = modifiedDate;
         this.hashTage = hashTage;
         this.attachedPost = attachedPost;
     }
@@ -38,6 +42,14 @@ public class Post {
         this.postId = postId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getContent() {
         return content;
     }
@@ -46,12 +58,20 @@ public class Post {
         this.content = content;
     }
 
-    public String getDate() {
-        return date;
+    public String getPostDate() {
+        return postDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
+    }
+
+    public String getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(String postDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public String[] getHashTage() {
@@ -76,7 +96,7 @@ public class Post {
                 "userId='" + userId + '\'' +
                 ", postId='" + postId + '\'' +
                 ", content='" + content + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + postDate + '\'' +
                 ", hashTage=" + Arrays.toString(hashTage) +
                 ", attachedPost=" + attachedPost +
                 '}';

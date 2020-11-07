@@ -4,7 +4,7 @@ display:
 spring:
   datasource:
     username: root
-    password: comp353
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/concordia
     type: com.alibaba.druid.pool.DruidDataSource
