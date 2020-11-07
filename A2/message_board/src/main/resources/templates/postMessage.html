@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Post Message</title>
@@ -31,6 +31,14 @@
         </form>
         <a href="view_message.jsp"><button class="bt"> 查看留言</button></a>
     </center>
+
+    <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <div th:if="${uploadMessage}">
+            <p th:text="${uploadMessage}"/>
+        </div>
+        <button type="submit">Upload</button>
+    </form>
 </div>
 
 </body>

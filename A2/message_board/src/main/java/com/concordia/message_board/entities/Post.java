@@ -1,5 +1,7 @@
 package com.concordia.message_board.entities;
 
+import java.io.InputStream;
+import java.sql.Blob;
 import java.util.Arrays;
 
 public class Post {
@@ -8,22 +10,22 @@ public class Post {
     private String title;
     private String content;
     private String postDate;
-    private String modifiedDate;
     private String[] hashTage;
-    private AttachedPost attachedPost;
+    //private AttachedPost attachedPost;
+    private Blob attachment;
 
     public Post() {
     }
 
-    public Post(String userId, String postId, String title, String content, String postDate, String modifiedDate, String[] hashTage, AttachedPost attachedPost) {
+    public Post(String userId, String postId, String title, String content, String postDate, String[] hashTage, Blob attachment) { //AttachedPost attachedPost
         this.userId = userId;
         this.postId = postId;
         this.title = title;
         this.content = content;
         this.postDate = postDate;
-        this.modifiedDate = modifiedDate;
         this.hashTage = hashTage;
-        this.attachedPost = attachedPost;
+        this.attachment = attachment;
+        //this.attachedPost = attachedPost;
     }
 
     public String getUserId() {
@@ -66,12 +68,12 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public String getModifiedDate() {
-        return modifiedDate;
+    public Blob getAttachment(){
+        return attachment;
     }
 
-    public void setModifiedDate(String postDate) {
-        this.modifiedDate = modifiedDate;
+    public void setAttachment(Blob attachment){
+        this.attachment = attachment;
     }
 
     public String[] getHashTage() {
@@ -82,13 +84,13 @@ public class Post {
         this.hashTage = hashTage;
     }
 
-    public AttachedPost getAttachedPost() {
+    /*public AttachedPost getAttachedPost() {
         return attachedPost;
-    }
+    }*/
 
-    public void setAttachedPost(AttachedPost attachedPost) {
+    /*public void setAttachedPost(AttachedPost attachedPost) {
         this.attachedPost = attachedPost;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -98,7 +100,7 @@ public class Post {
                 ", content='" + content + '\'' +
                 ", date='" + postDate + '\'' +
                 ", hashTage=" + Arrays.toString(hashTage) +
-                ", attachedPost=" + attachedPost +
+                ", attachedPost=" +
                 '}';
     }
 }
