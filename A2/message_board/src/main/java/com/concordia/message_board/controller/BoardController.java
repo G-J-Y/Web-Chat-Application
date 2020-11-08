@@ -37,13 +37,21 @@ public class BoardController {
         return "login";
     }
 
+    @GetMapping("/ok")
+    public String ok(){
+        return "Ok";
+    }
+
+
     @PostMapping("/authentication")
-    public String authentication(@RequestParam("username") String username,
+    public String authentication(@RequestParam("userId") String userId,
                                  @RequestParam("password") String password,
                                  Map<String,Object> map, HttpSession session){
-
         System.out.println("Number---->"+number);
-        if(postManager.authentication(username, password)) return "Ok";
+        if(postManager.authentication(userId, password)){
+            session.setAttribute("userId",userId);
+            return "redirect:/message";
+        }
 
         return "error";
     }
@@ -52,7 +60,7 @@ public class BoardController {
     public String post(@RequestParam("title") String title,
                        @RequestParam("content") String content,
                        @RequestParam("file") MultipartFile file,
-                       Model model) throws SQLException, IOException {
+                       Model model,HttpSession session) throws SQLException, IOException {
 
         String date = messageMapper.getPostTime();
         InputStream in = null;
