@@ -17,6 +17,14 @@ public class Post {
     public Post() {
     }
 
+    public Post(String userId,String title, String content, String postDate, Blob attachment){
+        this.userId = userId;
+        this.title = title;
+        this.content = content;
+        this.postDate = postDate;
+        this.attachment = attachment;
+    }
+
     public Post(String userId, String postId, String title, String content, String postDate, String[] hashTage, Blob attachment) { //AttachedPost attachedPost
         this.userId = userId;
         this.postId = postId;

@@ -3,6 +3,9 @@ package com.concordia.message_board.mapper;
 import com.concordia.message_board.entities.Post;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageMapper {
@@ -33,7 +36,7 @@ public class MessageMapper {
         statement.setString(3,title);
         statement.setString(4,postDate);
         statement.setString(5,content);
-        //statement.setBlob(6,);
+        statement.setBlob(6,attachment);
 
         // make changes in database
         statement.execute();
@@ -45,27 +48,35 @@ public class MessageMapper {
     }
 
     public List<Post> getAllPost() throws SQLException {
+
+        List<Post> allPost = new ArrayList<>();
         Statement stm = conn.createStatement();
         ResultSet result = stm.executeQuery("select count(*) from post");
-        if (result.next()){
 
+        while (result.next()){
+            Post post = extractPostFromResultSet(result);
+            allPost.add(post);
         }
-
         //conn.close();
-        return null;
+        return allPost;
     }
 
     private Post extractPostFromResultSet(ResultSet rs) throws SQLException {
 
         Post post = new Post();
-
         post.setPostId( rs.getString("postId") );
         post.setUserId( rs.getString("userid") );
         post.setTitle( rs.getString("title") );
         post.setPostDate( rs.getString("postDate") );
         post.setContent( rs.getString("content") );
         post.setAttachment( rs.getBlob("attachment") );
-
         return post;
+    }
+
+    public String getPostTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String date = formatter.format(now);
+        return date;
     }
 }
