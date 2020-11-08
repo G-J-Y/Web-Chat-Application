@@ -72,7 +72,7 @@ public class MessageMapper {
         conn.close();
         return allPost;
     }
-
+    // get User's Posts
     public List<Post> getUserPost() throws Exception {
         conn = getCon();
         List<Post> userPost = new ArrayList<>();
