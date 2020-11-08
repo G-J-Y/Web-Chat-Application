@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class BoardController {
@@ -43,7 +44,7 @@ public class BoardController {
                                  Map<String,Object> map, HttpSession session){
 
         System.out.println("Number---->"+number);
-        if(postManager.authentication(username, password)) return "Ok";
+        if(postManager.authentication(username, password)) return "postMessage";
 
         return "error";
     }
@@ -52,18 +53,20 @@ public class BoardController {
     public String post(@RequestParam("title") String title,
                        @RequestParam("content") String content,
                        @RequestParam("file") MultipartFile file,
-                       Model model) throws SQLException, IOException {
+                       Model model) throws Exception{
 
+        messageMapper = new MessageMapper();
         String date = messageMapper.getPostTime();
+        String postID = UUID.randomUUID().toString();
         InputStream in = null;
-        if (file.isEmpty()){
-            model.addAttribute("uploadMessage", "The file is empty!");
+        /*if (file.isEmpty()){
+            model.addAttribute("uploadMessage", "The file is empty!"); //error
             return "postMessage";
-        }
-        else
+        }*/
+        if (!file.isEmpty())
             in = file.getInputStream();
 
-        Post post = new Post("1",title,content,date, (Blob) in);
+        Post post = new Post("1",postID,title,content,date, (Blob) in);
 
         messageMapper.insertIntoDB(post);
         //get All post from DB
@@ -74,7 +77,7 @@ public class BoardController {
     }
 
     @GetMapping("/allPosts")
-    public String allPosts(Model model) throws SQLException {
+    public String allPosts(Model model) throws Exception {
 
         List<Post> posts = messageMapper.getAllPost();
 

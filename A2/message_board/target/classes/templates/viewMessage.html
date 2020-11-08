@@ -7,7 +7,7 @@
 <body>
 
 <div id="content" style="text-align: center">
-    <table width="99%" id="table1" th:each="post : ${posts}">
+    <table width="60%" id="table1" th:each="post : ${posts}">
         <tr id="message" >
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
@@ -24,13 +24,12 @@
             <td>Attachment</td>
             <td id="attachment"></td>
         </tr>
-
     </table>
 </div>
 <br/><br/>
 <div style="text-align: center;">
-    <a href="index.jsp"><button class="bt"> 返回首页</button></a>
-    <a href="liuyan.html"><button class="bt"> 继续留言</button></a>
+    <a href="index.jsp"><button class="bt"> Back </button></a>
+    <a href="liuyan.html"><button class="bt"> Edit Post </button></a>
 </div>
 
 </body>

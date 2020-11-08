@@ -9,15 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageMapper {
-    Connection conn;
 
-    public void clearTable() throws SQLException {
+    private String jdbcName ="com.mysql.cj.jdbc.Driver";
+    private Connection conn;
+
+    public MessageMapper(){
+    }
+
+    public Connection getCon() throws Exception{
+        Class.forName(jdbcName);
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT", "root","");
+        return conn;
+    }
+
+    public void clearTable() throws Exception {
+        conn = getCon();
         Statement stm = conn.createStatement();
         stm.execute("DROP TABLE IF EXISTS post;");
         System.out.println("Table deleted");
     }
 
-    public void insertIntoDB(Post post) throws SQLException {
+    public void insertIntoDB(Post post) throws Exception {
+        conn = getCon();
 
         String postId = post.getPostId();
         String userId = post.getUserId();
@@ -26,7 +39,6 @@ public class MessageMapper {
         String content = post.getContent();
         Blob attachment = post.getAttachment();
 
-        Statement stm = conn.createStatement();
         //stm.execute("CREATE TABLE IF NOT EXISTS Message(PostId Int PRIMARY KEY, UserId int, Title VARCHAR(255), PostDate DATETIME, Content VARCHAR(255))");
         String query = "INSERT INTO post(postid, userid, title, postdate, content, attachment) value(?,?,?,?,?,?)";
         PreparedStatement statement = conn.prepareStatement(query);
@@ -42,30 +54,44 @@ public class MessageMapper {
         statement.execute();
         // close the connections
         statement.close();
-        //conn.close();
+        conn.close();
         // debug
         System.out.println("Insert Message to Database");
     }
 
-    public List<Post> getAllPost() throws SQLException {
-
+    public List<Post> getAllPost() throws Exception {
+        conn = getCon();
         List<Post> allPost = new ArrayList<>();
         Statement stm = conn.createStatement();
-        ResultSet result = stm.executeQuery("select count(*) from post");
+        ResultSet result = stm.executeQuery("select * from post");
 
         while (result.next()){
             Post post = extractPostFromResultSet(result);
             allPost.add(post);
         }
-        //conn.close();
+        conn.close();
         return allPost;
+    }
+    // get User's Posts
+    public List<Post> getUserPost() throws Exception {
+        conn = getCon();
+        List<Post> userPost = new ArrayList<>();
+        Statement stm = conn.createStatement();
+        ResultSet result = stm.executeQuery("select * from post where userId = 1");
+
+        while (result.next()){
+            Post post = extractPostFromResultSet(result);
+            userPost.add(post);
+        }
+        conn.close();
+        return userPost;
     }
 
     private Post extractPostFromResultSet(ResultSet rs) throws SQLException {
 
         Post post = new Post();
         post.setPostId( rs.getString("postId") );
-        post.setUserId( rs.getString("userid") );
+        post.setUserId( rs.getString("userId") );
         post.setTitle( rs.getString("title") );
         post.setPostDate( rs.getString("postDate") );
         post.setContent( rs.getString("content") );
@@ -79,4 +105,5 @@ public class MessageMapper {
         String date = formatter.format(now);
         return date;
     }
+
 }
