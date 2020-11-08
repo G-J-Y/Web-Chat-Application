@@ -17,9 +17,10 @@ public class Post {
     public Post() {
     }
 
-    public Post(String userId,String title, String content, String postDate, Blob attachment){
+    public Post(String userId,String postId, String title, String content, String postDate, Blob attachment){
         this.userId = userId;
         this.title = title;
+        this.postId = postId;
         this.content = content;
         this.postDate = postDate;
         this.attachment = attachment;

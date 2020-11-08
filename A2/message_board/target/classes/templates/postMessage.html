@@ -7,7 +7,7 @@
 <body>
 <div id="Layer1">
     <center>
-        <form action="" th:action="@{/upload}" method="post" enctype="multipart/form-data">
+        <form action="" th:action="@{/post}" method="post" enctype="multipart/form-data">
             <table align="center">
                 <tr>
                     <td style=" font-weight:bold; width:10%" >Title：</td>
@@ -35,14 +35,38 @@
                 <tr >
                     <td colspan="2">
                         <center>
-                            <input type="submit" name="submit"id="submit" value="留言" />
+                            <input type="submit" name="post" value="Post" />
                         </center>
                     </td>
                 </tr>
             </table>
         </form>
-        <a href="view_message.jsp"><button class="bt"> 查看留言</button></a>
+        <form action="" th:action="@{/allPost}" method="GET" >
+            <input type="submit" name="viewPost" value="View Posts"/>
+        </form>
     </center>
+</div>
+
+<div id="content" style="text-align: center">
+    <h2>Post History</h2>
+    <table width="60%" id="table" th:each="post : ${posts}">
+        <tr id="message" >
+            <td>Title</td>
+            <td id="title" th:text="${post.getTitle()}"></td>
+        </tr>
+        <tr>
+            <td>Content</td>
+            <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td id="date" th:text="${post.getPostDate()}"></td>
+        </tr>
+        <tr>
+            <td>Attachment</td>
+            <td id="attachment"></td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
