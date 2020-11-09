@@ -38,69 +38,23 @@ public class BoardController {
         return "login";
     }
 
-    @GetMapping("/ok")
-    public String ok(){
-        return "Ok";
-    }
-
 
     @PostMapping("/authentication")
     public String authentication(@RequestParam("userId") String userId,
                                  @RequestParam("password") String password,
                                  Map<String,Object> map, HttpSession session){
         System.out.println("Number---->"+number);
-<<<<<<< HEAD
+
         if(postManager.authentication(userId, password)){
             session.setAttribute("userId",userId);
-            return "redirect:/message";
+            return "redirect:/postMessage.html";
         }
-=======
-        if(postManager.authentication(username, password)) return "postMessage";
->>>>>>> ac22fc5e6d8b464600a225745d22876e6e6b16e2
+
 
         return "error";
     }
 
-    @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public String post(@RequestParam("title") String title,
-                       @RequestParam("content") String content,
-                       @RequestParam("file") MultipartFile file,
-<<<<<<< HEAD
-                       Model model,HttpSession session) throws SQLException, IOException {
-=======
-                       Model model) throws Exception{
->>>>>>> ac22fc5e6d8b464600a225745d22876e6e6b16e2
 
-        messageMapper = new MessageMapper();
-        String date = messageMapper.getPostTime();
-        String postID = UUID.randomUUID().toString();
-        InputStream in = null;
-        /*if (file.isEmpty()){
-            model.addAttribute("uploadMessage", "The file is empty!"); //error
-            return "postMessage";
-        }*/
-        if (!file.isEmpty())
-            in = file.getInputStream();
-
-        Post post = new Post("1",postID,title,content,date, (Blob) in);
-
-        messageMapper.insertIntoDB(post);
-        //get All post from DB
-        List<Post> posts = messageMapper.getAllPost();
-        model.addAttribute("posts", posts);
-
-        return "viewMessage";
-    }
-
-    @GetMapping("/allPosts")
-    public String allPosts(Model model) throws Exception {
-
-        List<Post> posts = messageMapper.getAllPost();
-
-        model.addAttribute("posts", posts);
-
-        return "viewMessage";
-    }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String upload(@RequestParam("file") MultipartFile file, Model model){

@@ -11,6 +11,8 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
       registry.addViewController("/message").setViewName("viewMessage");
       registry.addViewController("/index.html").setViewName("login");
+      registry.addViewController("/postMessage.html").setViewName("postMessage");
+      registry.addViewController("/delete.html").setViewName("delete");
     }
 
      //register interceptor

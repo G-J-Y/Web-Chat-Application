@@ -12,6 +12,13 @@
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
         </tr>
+        <tr id="userId" >
+            <td>UserId</td>
+            <td id="title" th:text="${post.getUserId()}"></td>
+        </tr><tr id="userId" >
+            <td>PostId</td>
+            <td id="title" th:text="${post.getPostId()}"></td>
+        </tr>
         <tr>
             <td>Content</td>
             <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
@@ -24,6 +31,11 @@
             <td>Attachment</td>
             <td id="attachment"></td>
         </tr>
+        <tr>
+            <td>Edition</td>
+            <td id="edited" th:text = "Edited"></td>
+        </tr>
+        <br/>
     </table>
 </div>
 <br/><br/>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete a post</title>
+</head>
+<body>
+    <div>
+        <form th:action="@{/delete}" method="post">
+        <label>Type your target userId</label>
+            <input type="text" placeholder="UserId" name="userId" >
+            <button class="btn btn-lg btn-primary btn-block" type="submit" >Delete</button>
+        </form>
+
+    </div>
+</body>
+</html>

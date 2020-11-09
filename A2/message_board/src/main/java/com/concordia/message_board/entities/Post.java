@@ -10,9 +10,8 @@ public class Post {
     private String title;
     private String content;
     private String postDate;
-    private String[] hashTage;
-    //private AttachedPost attachedPost;
     private Blob attachment;
+    private boolean edited = false;
 
     public Post() {
     }
@@ -26,15 +25,21 @@ public class Post {
         this.attachment = attachment;
     }
 
-    public Post(String userId, String postId, String title, String content, String postDate, String[] hashTage, Blob attachment) { //AttachedPost attachedPost
-        this.userId = userId;
-        this.postId = postId;
-        this.title = title;
-        this.content = content;
-        this.postDate = postDate;
-        this.hashTage = hashTage;
-        this.attachment = attachment;
-        //this.attachedPost = attachedPost;
+    public Post(Post copyPost){
+        this.userId = copyPost.userId;
+        this.postId = copyPost.postId;
+        this.title = copyPost.title;
+        this.content = copyPost.content;
+        this.postDate = copyPost.postDate;
+        this.attachment = copyPost.attachment;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 
     public String getUserId() {
@@ -85,13 +90,6 @@ public class Post {
         this.attachment = attachment;
     }
 
-    public String[] getHashTage() {
-        return hashTage;
-    }
-
-    public void setHashTage(String[] hashTage) {
-        this.hashTage = hashTage;
-    }
 
     /*public AttachedPost getAttachedPost() {
         return attachedPost;
@@ -108,7 +106,6 @@ public class Post {
                 ", postId='" + postId + '\'' +
                 ", content='" + content + '\'' +
                 ", date='" + postDate + '\'' +
-                ", hashTage=" + Arrays.toString(hashTage) +
                 ", attachedPost=" +
                 '}';
     }
