@@ -59,14 +59,18 @@ public class BoardController {
         String date = messageMapper.getPostTime();
         String postID = UUID.randomUUID().toString();
         InputStream in = null;
+        byte[] bytes = null;
+        Blob blob = null;
         /*if (file.isEmpty()){
             model.addAttribute("uploadMessage", "The file is empty!"); //error
             return "postMessage";
         }*/
         if (!file.isEmpty())
-            in = file.getInputStream();
+            //in = file.getInputStream();
+            bytes = file.getBytes();
+            blob = new SerialBlob(bytes);
 
-        Post post = new Post("1",postID,title,content,date, (Blob) in);
+        Post post = new Post("1",postID,title,content,date, blob);
 
         messageMapper.insertIntoDB(post);
         //get All post from DB
