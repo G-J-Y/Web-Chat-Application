@@ -6,7 +6,7 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/concordia
+    url: jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 5
     minIdle: 5

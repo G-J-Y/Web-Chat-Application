@@ -64,8 +64,13 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <td id="attachment"></td>
+            <td id="attachment" th:text="${filename}"></td>
         </tr>
+        <br>
+        <form action="" th:action="@{/delete}" method="POST" >
+            <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
+            <input type="submit" name="delete" value="Delete"/>
+        </form>
     </table>
 </div>
 </body>

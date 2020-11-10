@@ -12,13 +12,14 @@ public class MessageMapper {
 
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
+    private String password = "";
 
     public MessageMapper(){
     }
 
     public Connection getCon() throws Exception{
         Class.forName(jdbcName);
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT", "root","");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT", "root",password);
         return conn;
     }
 
@@ -73,11 +74,13 @@ public class MessageMapper {
         return allPost;
     }
     // get User's Posts
-    public List<Post> getUserPost() throws Exception {
+    public List<Post> getUserPost(String id) throws Exception {
         conn = getCon();
         List<Post> userPost = new ArrayList<>();
-        Statement stm = conn.createStatement();
-        ResultSet result = stm.executeQuery("select * from post where userId = 1");
+        String query = "select * from post where userId = ?";
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.setString(1,id);
+        ResultSet result = statement.executeQuery();
 
         while (result.next()){
             Post post = extractPostFromResultSet(result);
