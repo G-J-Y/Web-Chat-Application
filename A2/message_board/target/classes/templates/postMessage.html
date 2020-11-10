@@ -41,7 +41,7 @@
                 </tr>
             </table>
         </form>
-        <form action="" th:action="@{/allPost}" method="GET" >
+        <form action="" th:action="@{/allPosts}" method="GET" >
             <input type="submit" name="viewPost" value="View Posts"/>
         </form>
     </center>
@@ -64,12 +64,16 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <td id="attachment" th:text="${filename}"></td>
+            <td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>
         </tr>
         <br>
         <form action="" th:action="@{/delete}" method="POST" >
             <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
             <input type="submit" name="delete" value="Delete"/>
+        </form>
+        <form action="" th:action="@{/edit}" method="POST" >
+            <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
+            <input type="submit" name="edit" value="Edit"/>
         </form>
     </table>
 </div>

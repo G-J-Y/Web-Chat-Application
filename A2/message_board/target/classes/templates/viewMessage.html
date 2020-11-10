@@ -28,7 +28,7 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <td id="attachment"></td>
+            <td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>
         </tr>
         <tr>
             <td>Edition</td>
@@ -39,7 +39,10 @@
 </div>
 <br/><br/>
 <div style="text-align: center;">
-    <a href="postMessage.html"><button class="bt"> Back </button></a>
+    <form action="" th:action="@{/back}" method="GET">
+        <input type="submit" name="back" value="Back"/>
+    </form>
+    <!--<a href="postMessage.html"><button class="bt"> Back </button></a>-->
     <a href=""><button class="bt"> Edit Post </button></a>
 </div>
 

@@ -4,33 +4,37 @@ import java.sql.Blob;
 
 public class Attachment {
     //public String path;
-    public String postId;
-    public String userId;
-    public String fileName;
-    public String fileType;
-    public int fileSize;
-    public Blob blob;
+    private String attachId;
+    private String postId;
+    //public String userId;
+    private String fileName;
+    private String fileType;
+    private long fileSize;
+    private Blob blob;
 
     public Attachment() {
+        fileName = "";
+        fileType = "";
     }
 
-    public Attachment(String postId, String userId, String fileName, String fileType, int fileSize, Blob blob) {
+    public Attachment(String attachId, String postId, String fileName, String fileType, long fileSize, Blob blob) {
         //this.path = path;
+        this.attachId = attachId;
         this.postId = postId;
-        this.userId = userId;
+        //this.userId = userId;
         this.fileName = fileName;
         this.fileType = fileType;
         this.fileSize = fileSize;
         this.blob = blob;
     }
 
-    /*public String getPath() {
-        return path;
-    }*/
+    public String getAttachId() {
+        return attachId;
+    }
 
-    /*public void setPath(String path) {
-        this.path = path;
-    }*/
+    public void setAttachId(String attachId) {
+        this.attachId = attachId;
+    }
 
     public String getPostId() {
         return postId;
@@ -38,14 +42,6 @@ public class Attachment {
 
     public void setPostId(String postId) {
         this.postId = postId;
-    }
-
-    public String getUserId(){
-        return userId;
-    }
-
-    public void setUserId(String userId){
-        this.userId = userId;
     }
 
     public Blob getBlob(){
@@ -72,11 +68,11 @@ public class Attachment {
         this.fileType = fileType;
     }
 
-    public int getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(int fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -84,7 +80,7 @@ public class Attachment {
     public String toString() {
         return "AttachedPost{" +
                 ", postId='" + postId + '\'' +
-                ", userId='" + userId + '\'' +
+                ", file name='" + fileName + '\'' +
                 '}';
     }
 }
