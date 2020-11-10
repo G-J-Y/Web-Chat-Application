@@ -12,6 +12,7 @@ import org.synchronoss.cloud.nio.multipart.util.IOUtils;
 
 
 import javax.servlet.http.HttpSession;
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.util.List;
@@ -24,6 +25,8 @@ public class ModelController {
 
     @Autowired
     PostManager postManager;
+    MessageMapper messageMapper;
+
     @PostMapping("/creatPost")
     public String createPost(Post post, HttpSession session){
         System.out.println(session.getAttribute("userId"));
@@ -44,47 +47,55 @@ public class ModelController {
                        @RequestParam(value = "file",required = false) MultipartFile file,
                        Model model, HttpSession session) throws Exception {
 
-
-        //messageMapper = new MessageMapper();
-        String date = postManager.getPostTime();
+        messageMapper = new MessageMapper();
+        String date = messageMapper.getPostTime();
         String postID = UUID.randomUUID().toString().substring(0,12);
-        InputStream in = null;
-        /*if (file.isEmpty()){
-            model.addAttribute("uploadMessage", "The file is empty!"); //error
-            return "postMessage";
-        }*/
-        if (!file.isEmpty())
-            in = file.getInputStream();
+        Blob blob = null;
+        String fileName = file.getOriginalFilename();
+
+        if (!file.isEmpty()) {
+            //in = file.getInputStream();
+            byte[] bytes = file.getBytes();
+            blob = new SerialBlob(bytes);
+        }
         String userId = (String)session.getAttribute("userId");
-        //----------------------------------------------------
+        Post post = new Post(userId,postID,title,content,date, blob);
+        messageMapper.insertIntoDB(post);
 
-        //--------------------------------------------------------
-
-        Post post = new Post(userId,postID,title,content,date, (Blob) in);
-
-        postManager.createPost(post);
-
+        //postManager.createPost(post);
+        //List<Post> posts = postManager.getAllPost();
 
         //get All post from DB
-         List<Post> posts = postManager.getAllPost();
-         model.addAttribute("posts", posts);
+        List<Post> posts = messageMapper.getUserPost(userId);
+        model.addAttribute("posts", posts);
+        model.addAttribute("filename",fileName);
 
-        return "viewMessage";
+        return "postMessage";
     }
 
     @PostMapping("/delete")
-    public String deleteByUserId(String userId){
-        postManager.deleteByPostId(userId);
-        return "viewMessage";
+    public String deleteByPostId(String postId){
+        postManager.deleteByPostId(postId);
+        return "redirect:/afterDelete";
     }
 
     @GetMapping("/allPosts")
     public String allPosts(Model model) throws Exception {
 
-        //   List<Post> posts = messageMapper.getAllPost();
-
-        //    model.addAttribute("posts", posts);
+        messageMapper = new MessageMapper();
+        List<Post> posts = messageMapper.getAllPost();
+        model.addAttribute("posts", posts);
 
         return "viewMessage";
+    }
+
+    @GetMapping("/afterDelete")
+    public String afterDelete(Model model,
+                              HttpSession session) throws Exception {
+        messageMapper = new MessageMapper();
+        String userId = (String)session.getAttribute("userId");
+        List<Post> posts = messageMapper.getUserPost(userId);
+        model.addAttribute("posts", posts);
+        return "postMessage";
     }
 }

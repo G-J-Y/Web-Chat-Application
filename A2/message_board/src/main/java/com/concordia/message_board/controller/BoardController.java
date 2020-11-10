@@ -12,17 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.*;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class BoardController {
@@ -37,7 +28,6 @@ public class BoardController {
     public String logIn(){
         return "login";
     }
-
 
     @PostMapping("/authentication")
     public String authentication(@RequestParam("userId") String userId,

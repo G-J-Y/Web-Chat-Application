@@ -2,6 +2,7 @@ package com.concordia.message_board.mapper;
 
 import com.concordia.message_board.entities.Post;
 import org.apache.ibatis.annotations.*;
+import org.springframework.context.annotation.Bean;
 
 
 import java.sql.Blob;

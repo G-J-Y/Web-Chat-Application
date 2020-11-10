@@ -5,20 +5,19 @@
     <title>Message Board</title>
 </head>
 <body>
-
 <div id="content" style="text-align: center">
     <table width="60%" id="table1" th:each="post : ${posts}">
         <tr id="message" >
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
         </tr>
-        <tr id="userId" >
+        <!--<tr id="userId" >
             <td>UserId</td>
             <td id="title" th:text="${post.getUserId()}"></td>
         </tr><tr id="userId" >
             <td>PostId</td>
             <td id="title" th:text="${post.getPostId()}"></td>
-        </tr>
+        </tr>-->
         <tr>
             <td>Content</td>
             <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
@@ -35,13 +34,13 @@
             <td>Edition</td>
             <td id="edited" th:text = "Edited"></td>
         </tr>
-        <br/>
+        <br/><br/>
     </table>
 </div>
 <br/><br/>
 <div style="text-align: center;">
-    <a href="index.jsp"><button class="bt"> Back </button></a>
-    <a href="liuyan.html"><button class="bt"> Edit Post </button></a>
+    <a href="postMessage.html"><button class="bt"> Back </button></a>
+    <a href=""><button class="bt"> Edit Post </button></a>
 </div>
 
 </body>
