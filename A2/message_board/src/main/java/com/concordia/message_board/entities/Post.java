@@ -10,18 +10,20 @@ public class Post {
     private String title;
     private String content;
     private String postDate;
-    private Blob attachment;
+    //private Blob attachBlob;
     private boolean edited = false;
+    private Attachment attachment;
 
     public Post() {
     }
 
-    public Post(String userId,String postId, String title, String content, String postDate, Blob attachment){
+    public Post(String userId,String postId, String title, String content, String postDate, Attachment attachment){
         this.userId = userId;
         this.title = title;
         this.postId = postId;
         this.content = content;
         this.postDate = postDate;
+        //this.attachBlob = attachBlob;
         this.attachment = attachment;
     }
 
@@ -31,7 +33,7 @@ public class Post {
         this.title = copyPost.title;
         this.content = copyPost.content;
         this.postDate = copyPost.postDate;
-        this.attachment = copyPost.attachment;
+        //this.attachBlob = copyPost.attachBlob;
     }
 
     public boolean isEdited() {
@@ -82,22 +84,22 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public Blob getAttachment(){
+    /*public Blob getAttachBlob(){
+        return attachBlob;
+    }*/
+
+    /*public void setAttachBlob(Blob attachBlob){
+        this.attachBlob = attachBlob;
+    }*/
+
+
+    public Attachment getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(Blob attachment){
+    public void setAttachment(Attachment attachment) {
         this.attachment = attachment;
     }
-
-
-    /*public AttachedPost getAttachedPost() {
-        return attachedPost;
-    }*/
-
-    /*public void setAttachedPost(AttachedPost attachedPost) {
-        this.attachedPost = attachedPost;
-    }*/
 
     @Override
     public String toString() {

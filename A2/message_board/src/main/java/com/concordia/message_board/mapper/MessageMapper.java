@@ -1,5 +1,6 @@
 package com.concordia.message_board.mapper;
 
+import com.concordia.message_board.entities.Attachment;
 import com.concordia.message_board.entities.Post;
 
 import java.sql.*;
@@ -12,6 +13,7 @@ public class MessageMapper {
 
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
+    private String serverName = "root";
     private String password = "";
 
     public MessageMapper(){
@@ -19,7 +21,7 @@ public class MessageMapper {
 
     public Connection getCon() throws Exception{
         Class.forName(jdbcName);
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT", "root",password);
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/concordia?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT", serverName, password);
         return conn;
     }
 
@@ -38,10 +40,10 @@ public class MessageMapper {
         String title = post.getTitle();
         String postDate = post.getPostDate();
         String content = post.getContent();
-        Blob attachment = post.getAttachment();
+        Attachment attachment = post.getAttachment();
 
-        //stm.execute("CREATE TABLE IF NOT EXISTS Message(PostId Int PRIMARY KEY, UserId int, Title VARCHAR(255), PostDate DATETIME, Content VARCHAR(255))");
-        String query = "INSERT INTO post(postid, userid, title, postdate, content, attachment) value(?,?,?,?,?,?)";
+        //String query = "INSERT INTO post(postid, userid, title, postdate, content, attachment) value(?,?,?,?,?,?)";
+        String query = "INSERT INTO post(postid, userid, title, postdate, content) value(?,?,?,?,?)";
         PreparedStatement statement = conn.prepareStatement(query);
 
         statement.setString(1,postId);
@@ -49,15 +51,17 @@ public class MessageMapper {
         statement.setString(3,title);
         statement.setString(4,postDate);
         statement.setString(5,content);
-        statement.setBlob(6,attachment);
-
-        // make changes in database
+        //statement.setObject(6,attachment);
+        //statement.setBlob(6,attachment);
         statement.execute();
-        // close the connections
         statement.close();
         conn.close();
+        //insert attachment
+        if (attachment != null){
+            insertAttach(attachment);
+        }
         // debug
-        System.out.println("Insert Message to Database");
+        System.out.println("Insert Post to Database");
     }
 
     public List<Post> getAllPost() throws Exception {
@@ -98,8 +102,57 @@ public class MessageMapper {
         post.setTitle( rs.getString("title") );
         post.setPostDate( rs.getString("postDate") );
         post.setContent( rs.getString("content") );
-        post.setAttachment( rs.getBlob("attachment") );
+        //post.setAttachBlob( rs.getBlob("attachment") );
+
+        Attachment attachment = extractAttachFromResultSet(post.getPostId());
+        post.setAttachment(attachment);
+
         return post;
+    }
+
+    private Attachment extractAttachFromResultSet(String postId) throws SQLException {
+
+        String query = "select * from attach where attachPostId = ?";
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.setString(1,postId);
+        ResultSet rs = statement.executeQuery();
+
+        Attachment attachment = new Attachment();
+        if (rs.next() == true) {
+            attachment.setAttachId(rs.getString("attachId"));
+            attachment.setPostId(rs.getString("attachPostId"));
+            attachment.setFileName(rs.getString("fileName"));
+            attachment.setFileType(rs.getString("fileType"));
+            attachment.setFileSize(rs.getLong("fileSize"));
+            attachment.setBlob(rs.getBlob("fileBlob"));
+        }
+        //post.setAttachBlob( rs.getBlob("attachment") );
+        return attachment;
+    }
+
+    public void insertAttach(Attachment attachment) throws Exception {
+
+        conn = getCon();
+        String attachId = attachment.getAttachId();
+        String postId = attachment.getPostId();
+        String fileName = attachment.getFileName();
+        String fileType = attachment.getFileType();
+        long fileSize = attachment.getFileSize();
+        Blob blob = attachment.getBlob();
+
+        String query = "INSERT INTO attach(attachId, attachPostId, fileName, fileType, fileSize, fileBlob) value(?,?,?,?,?,?)";
+        PreparedStatement statement = conn.prepareStatement(query);
+
+        statement.setString(1,attachId);
+        statement.setString(2,postId);
+        statement.setString(3,fileName);
+        statement.setString(4,fileType);
+        statement.setLong(5,fileSize);
+        statement.setBlob(6,blob);
+        statement.execute();
+        statement.close();
+        conn.close();
+
     }
 
     public String getPostTime(){

@@ -1,5 +1,6 @@
 package com.concordia.message_board.controller;
 
+import com.concordia.message_board.entities.Attachment;
 import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
@@ -50,25 +51,33 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String date = messageMapper.getPostTime();
         String postID = UUID.randomUUID().toString().substring(0,12);
+        String userId = (String)session.getAttribute("userId");
+
         Blob blob = null;
         String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
+        Long fileSize = file.getSize();
+        Attachment attachment = null;
 
         if (!file.isEmpty()) {
             //in = file.getInputStream();
             byte[] bytes = file.getBytes();
             blob = new SerialBlob(bytes);
+
+            String attachId = UUID.randomUUID().toString().substring(0,12);
+            attachment = new Attachment(attachId,postID,fileName,fileType,fileSize,blob);
         }
-        String userId = (String)session.getAttribute("userId");
-        Post post = new Post(userId,postID,title,content,date, blob);
+
+
+        Post post = new Post(userId,postID,title,content,date, attachment);
         messageMapper.insertIntoDB(post);
 
         //postManager.createPost(post);
         //List<Post> posts = postManager.getAllPost();
 
-        //get All post from DB
+        //get current user's posts from DB
         List<Post> posts = messageMapper.getUserPost(userId);
         model.addAttribute("posts", posts);
-        model.addAttribute("filename",fileName);
 
         return "postMessage";
     }
@@ -97,5 +106,24 @@ public class ModelController {
         List<Post> posts = messageMapper.getUserPost(userId);
         model.addAttribute("posts", posts);
         return "postMessage";
+    }
+
+    @GetMapping("/back")
+    public String back(Model model,
+                              HttpSession session) throws Exception {
+        messageMapper = new MessageMapper();
+        String userId = (String)session.getAttribute("userId");
+        List<Post> posts = messageMapper.getUserPost(userId);
+        model.addAttribute("posts", posts);
+        return "postMessage";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String edit(@RequestParam(value = "title",required = false) String title,
+                       @RequestParam("content") String content,
+                       @RequestParam(value = "file",required = false) MultipartFile file,
+                       Model model, HttpSession session) throws Exception {
+
+        return "editMessage";
     }
 }

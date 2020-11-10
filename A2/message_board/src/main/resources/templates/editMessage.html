@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="" th:action="@{/post}" method="post" enctype="multipart/form-data">
+    <table align="center">
+        <tr>
+            <td style=" font-weight:bold; width:10%" >Title：</td>
+            <td width="90%" ><input id="title1" name="title"/></td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold; width:10%" > Content：</td>
+            <td >  <textarea id="textarea" cols="60" rows="10"  name="content"></textarea> </td>
+        </tr>
+
+        <tr>
+            <center>
+                <td style="font-weight:bold; width:10%" >Attachment：</td>
+                <!--<td width="90%" ><input id="attachment" name="attachment" /></td>-->
+                <td>
+                    <input type="file" name="file">
+                    <!--<div th:if="${uploadMessage}">
+                        <p th:text="${uploadMessage}"/>
+                    </div>-->
+                </td>
+            </center>
+        </tr>
+
+        <tr >
+            <td colspan="2">
+                <center>
+                    <input type="submit" name="post" value="Post" />
+                </center>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
