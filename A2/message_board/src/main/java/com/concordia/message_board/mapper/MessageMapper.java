@@ -64,6 +64,32 @@ public class MessageMapper {
         System.out.println("Insert Post to Database");
     }
 
+    public boolean updatePost(Post post) throws Exception {
+
+        conn = getCon();
+
+        String query = "UPDATE post SET title=?, postDate=?, content=? WHERE postId=?";
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, post.getTitle());
+        ps.setString(2, post.getPostDate());
+        ps.setString(3, post.getContent());
+        ps.setString(4, post.getPostId());
+
+        int i = ps.executeUpdate();
+
+        if (post.getAttachment().getAttachId() != null){
+            insertAttach(post.getAttachment());
+        }
+        conn.close();
+
+        if(i == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     public List<Post> getAllPost() throws Exception {
         conn = getCon();
         List<Post> allPost = new ArrayList<>();
@@ -94,7 +120,7 @@ public class MessageMapper {
         return userPost;
     }
 
-    private Post extractPostFromResultSet(ResultSet rs) throws SQLException {
+    public Post extractPostFromResultSet(ResultSet rs) throws SQLException {
 
         Post post = new Post();
         post.setPostId( rs.getString("postId") );
@@ -110,7 +136,30 @@ public class MessageMapper {
         return post;
     }
 
-    private Attachment extractAttachFromResultSet(String postId) throws SQLException {
+    public Post extractSpecificPost(String postId) throws Exception {
+
+        conn = getCon();
+        String query = "select * from post where postId = ?";
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.setString(1,postId);
+        ResultSet rs = statement.executeQuery();
+
+        Post post = new Post();
+        if(rs.next()) {
+            post.setPostId(rs.getString("postId"));
+            post.setUserId(rs.getString("userId"));
+            post.setTitle(rs.getString("title"));
+            post.setPostDate(rs.getString("postDate"));
+            post.setContent(rs.getString("content"));
+        }
+        Attachment attachment = extractAttachFromResultSet(post.getPostId());
+        post.setAttachment(attachment);
+        conn.close();
+
+        return post;
+    }
+
+    public Attachment extractAttachFromResultSet(String postId) throws SQLException {
 
         String query = "select * from attach where attachPostId = ?";
         PreparedStatement statement = conn.prepareStatement(query);
@@ -153,6 +202,48 @@ public class MessageMapper {
         statement.close();
         conn.close();
 
+    }
+
+/*    public boolean updateAttach(Attachment attachment) throws Exception {
+
+        conn = getCon();
+
+        String query = "UPDATE attach SET fileName=?, fileType=?, fileSize=?, fileBlob = ? WHERE attachId=? ";
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ps.setString(1, attachment.getFileName());
+        ps.setString(2, attachment.getFileType());
+        ps.setLong(3, attachment.getFileSize());
+        ps.setBlob(4, attachment.getBlob());
+
+        int i = ps.executeUpdate();
+
+        conn.close();
+
+        if(i == 1) {
+            return true;
+        }
+
+        return false;
+    }*/
+
+    public boolean deleteAttach(String postId) throws Exception {
+
+        conn = getCon();
+
+        String query = "DELETE FROM attach WHERE attachPostId = ?";
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.setString(1, postId);
+
+        int i = statement.executeUpdate();
+
+        if(i == 1) {
+            return true;
+        }
+
+        conn.close();
+
+        return false;
     }
 
     public String getPostTime(){

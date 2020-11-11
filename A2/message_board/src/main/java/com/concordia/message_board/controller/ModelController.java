@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +46,7 @@ public class ModelController {
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public String post(@RequestParam(value = "title",required = false) String title,
-                       @RequestParam("content") String content,
+                       @RequestParam(value = "content") String content,
                        @RequestParam(value = "file",required = false) MultipartFile file,
                        Model model, HttpSession session) throws Exception {
 
@@ -76,6 +78,43 @@ public class ModelController {
         //List<Post> posts = postManager.getAllPost();
 
         //get current user's posts from DB
+        List<Post> posts = messageMapper.getUserPost(userId);
+        model.addAttribute("posts", posts);
+
+        return "postMessage";
+    }
+
+    @RequestMapping(value = "/updatePost", method = RequestMethod.POST)
+    public String repost(@RequestParam(value = "postId",required = false) String postId,
+                         @RequestParam(value = "title",required = false) String title,
+                         @RequestParam("content") String content,
+                         @RequestParam(value = "file",required = false) MultipartFile file,
+                         Model model, HttpSession session) throws Exception {
+
+        messageMapper = new MessageMapper();
+        String date = messageMapper.getPostTime();
+        String userId = (String)session.getAttribute("userId");
+        //get post from Database
+        Post oldPost = messageMapper.extractSpecificPost(postId);
+        oldPost.setTitle(title);
+        oldPost.setPostDate(date);
+        oldPost.setContent(content);
+
+        if (!file.isEmpty()) {
+            Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
+
+            String fileName = file.getOriginalFilename();
+            String fileType = file.getContentType();
+            Long fileSize = file.getSize();
+            byte[] bytes = file.getBytes();
+            Blob blob = new SerialBlob(bytes);
+
+            String attachId = UUID.randomUUID().toString().substring(0,12);
+            Attachment attachment = new Attachment(attachId, oldPost.getPostId(), fileName, fileType, fileSize, blob);
+            oldPost.setAttachment(attachment);
+        }
+
+        messageMapper.updatePost(oldPost);
         List<Post> posts = messageMapper.getUserPost(userId);
         model.addAttribute("posts", posts);
 
@@ -119,11 +158,14 @@ public class ModelController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String edit(@RequestParam(value = "title",required = false) String title,
-                       @RequestParam("content") String content,
-                       @RequestParam(value = "file",required = false) MultipartFile file,
+    public String edit(@RequestParam(value = "postId",required = false) String postId,
+                       @RequestParam(value = "file",required = false) Attachment file,
                        Model model, HttpSession session) throws Exception {
 
+
+        Post oldPost = messageMapper.extractSpecificPost(postId);
+        model.addAttribute("post",oldPost);
         return "editMessage";
     }
+
 }
