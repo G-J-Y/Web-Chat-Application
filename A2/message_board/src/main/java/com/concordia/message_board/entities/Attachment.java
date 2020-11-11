@@ -78,7 +78,7 @@ public class Attachment {
 
     @Override
     public String toString() {
-        return "AttachedPost{" +
+        return "Attachment" +
                 ", postId='" + postId + '\'' +
                 ", file name='" + fileName + '\'' +
                 '}';

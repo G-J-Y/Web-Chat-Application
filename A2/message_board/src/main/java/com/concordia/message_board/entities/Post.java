@@ -108,7 +108,7 @@ public class Post {
                 ", postId='" + postId + '\'' +
                 ", content='" + content + '\'' +
                 ", date='" + postDate + '\'' +
-                ", attachedPost=" +
+                ", attachment=" + attachment.getFileName() +'\'' +
                 '}';
     }
 }
