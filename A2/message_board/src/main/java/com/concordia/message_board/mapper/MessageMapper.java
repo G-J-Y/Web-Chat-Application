@@ -52,8 +52,7 @@ public class MessageMapper {
         statement.setString(3,title);
         statement.setString(4,postDate);
         statement.setString(5,content);
-        //statement.setObject(6,attachment);
-        //statement.setBlob(6,attachment);
+
         statement.execute();
         statement.close();
         conn.close();
@@ -82,6 +81,7 @@ public class MessageMapper {
         if (post.getAttachment().getAttachId() != null){
             insertAttach(post.getAttachment());
         }
+
         conn.close();
 
         if(i == 1) {
@@ -91,15 +91,17 @@ public class MessageMapper {
         return false;
     }
 
-    public List<Post> getAllPost() throws Exception {
+    public List<Post> getAllPost(String number) throws Exception {
         conn = getCon();
         List<Post> allPost = new ArrayList<>();
         Statement stm = conn.createStatement();
         ResultSet result = stm.executeQuery("select * from post");
 
-        while (result.next()){
+        int count = 0;
+        while (result.next() && count < Integer.valueOf(number)){
             Post post = extractPostFromResultSet(result);
             allPost.add(post);
+            count++;
         }
         conn.close();
         return allPost;
@@ -208,7 +210,7 @@ public class MessageMapper {
 
     }
 
-/*    public boolean updateAttach(Attachment attachment) throws Exception {
+    public boolean updateAttach(Attachment attachment) throws Exception {
 
         conn = getCon();
 
@@ -219,6 +221,7 @@ public class MessageMapper {
         ps.setString(2, attachment.getFileType());
         ps.setLong(3, attachment.getFileSize());
         ps.setBlob(4, attachment.getBlob());
+        ps.setString(5, attachment.getAttachId());
 
         int i = ps.executeUpdate();
 
@@ -229,7 +232,7 @@ public class MessageMapper {
         }
 
         return false;
-    }*/
+    }
 
     public boolean deleteAttach(String postId) throws Exception {
 
