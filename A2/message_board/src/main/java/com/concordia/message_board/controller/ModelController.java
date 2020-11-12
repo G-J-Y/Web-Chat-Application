@@ -12,9 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.synchronoss.cloud.nio.multipart.util.IOUtils;
 
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,6 +170,29 @@ public class ModelController {
         Post oldPost = messageMapper.extractSpecificPost(postId);
         model.addAttribute("post",oldPost);
         return "editMessage";
+    }
+
+    @RequestMapping(value = "/file/{postId}", method = RequestMethod.GET)
+    public String updateStudy(@PathVariable ("postId") String postId,
+                              Model model,
+                              HttpServletResponse response) throws Exception {
+
+        messageMapper = new MessageMapper();
+        Post post = messageMapper.extractSpecificPost(postId);
+        //give a file name
+        String filename = post.getAttachment().getFileName();
+        // set contentType in response
+        response.setContentType(post.getAttachment().getFileType());
+        // set the download type
+        response.setHeader("Content-Disposition", "attachment;filename= " + filename);
+        // get a output stream from response
+        ServletOutputStream out = response.getOutputStream();
+
+        out.write(messageMapper.getAttachData(postId));
+        out.flush();
+        out.close();
+
+        return "viewMessage";
     }
 
 }

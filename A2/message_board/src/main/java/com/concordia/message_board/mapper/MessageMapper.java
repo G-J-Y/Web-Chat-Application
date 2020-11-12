@@ -30,6 +30,7 @@ public class MessageMapper {
         Statement stm = conn.createStatement();
         stm.execute("DROP TABLE IF EXISTS post;");
         System.out.println("Table deleted");
+        conn.close();
     }
 
     public void insertIntoDB(Post post) throws Exception {
@@ -120,8 +121,8 @@ public class MessageMapper {
         return userPost;
     }
 
-    public Post extractPostFromResultSet(ResultSet rs) throws SQLException {
-
+    public Post extractPostFromResultSet(ResultSet rs) throws Exception {
+        conn = getCon();
         Post post = new Post();
         post.setPostId( rs.getString("postId") );
         post.setUserId( rs.getString("userId") );
@@ -133,6 +134,7 @@ public class MessageMapper {
         Attachment attachment = extractAttachFromResultSet(post.getPostId());
         post.setAttachment(attachment);
 
+        conn.close();
         return post;
     }
 
@@ -159,8 +161,9 @@ public class MessageMapper {
         return post;
     }
 
-    public Attachment extractAttachFromResultSet(String postId) throws SQLException {
+    public Attachment extractAttachFromResultSet(String postId) throws Exception {
 
+        conn = getCon();
         String query = "select * from attach where attachPostId = ?";
         PreparedStatement statement = conn.prepareStatement(query);
         statement.setString(1,postId);
@@ -176,6 +179,7 @@ public class MessageMapper {
             attachment.setBlob(rs.getBlob("fileBlob"));
         }
         //post.setAttachBlob( rs.getBlob("attachment") );
+        conn.close();
         return attachment;
     }
 
@@ -244,6 +248,13 @@ public class MessageMapper {
         conn.close();
 
         return false;
+    }
+
+    public byte[] getAttachData(String postId) throws Exception {
+        Attachment attachment = extractAttachFromResultSet(postId);
+        Blob blob = attachment.getBlob();
+        byte byteArray[] = blob.getBytes(1,(int)blob.length());
+        return byteArray;
     }
 
     public String getPostTime(){
