@@ -5,6 +5,7 @@ import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,8 @@ public class ModelController {
         return "Ok";
     }
 
-
+    @Value("${display.number}")
+    private String number;
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public String post(@RequestParam(value = "title",required = false) String title,
@@ -103,10 +105,10 @@ public class ModelController {
         oldPost.setTitle(title);
         oldPost.setPostDate(date);
         oldPost.setContent(content);
+        Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
 
         if (!file.isEmpty()) {
-            Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
-
+            //Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
             String fileName = file.getOriginalFilename();
             String fileType = file.getContentType();
             Long fileSize = file.getSize();
@@ -135,7 +137,7 @@ public class ModelController {
     public String allPosts(Model model) throws Exception {
 
         messageMapper = new MessageMapper();
-        List<Post> posts = messageMapper.getAllPost();
+        List<Post> posts = messageMapper.getAllPost(number);
         model.addAttribute("posts", posts);
 
         return "viewMessage";

@@ -28,7 +28,9 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>
+            <!--<td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>-->
+            <!--<td><a th:href="@{'/file?name=' + ${post.getAttachment().getFileName()}}" th:text="${post.getAttachment().getFileName()}"></a></td>-->
+            <td><a th:href="@{/file/{postId} (postId = ${post.getPostId()})}" th:text="${post.getAttachment().getFileName()}"></a></td>
         </tr>
         <tr>
             <td>Edition</td>
