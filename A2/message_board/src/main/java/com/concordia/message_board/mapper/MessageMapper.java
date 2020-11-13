@@ -17,7 +17,7 @@ public class MessageMapper {
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
     private String serverName = "root";
-    private String password = "yourps";
+    private String password = "";
 
     public MessageMapper(){
     }
@@ -44,10 +44,11 @@ public class MessageMapper {
         String title = post.getTitle();
         String postDate = post.getPostDate();
         String content = post.getContent();
+        boolean updated = post.isEdited();
         Attachment attachment = post.getAttachment();
 
         //String query = "INSERT INTO post(postid, userid, title, postdate, content, attachment) value(?,?,?,?,?,?)";
-        String query = "INSERT INTO post(postid, userid, title, postdate, content) value(?,?,?,?,?)";
+        String query = "INSERT INTO post(postid, userid, title, postdate, content, updated) value(?,?,?,?,?,?)";
         PreparedStatement statement = conn.prepareStatement(query);
 
         statement.setString(1,postId);
@@ -55,6 +56,7 @@ public class MessageMapper {
         statement.setString(3,title);
         statement.setString(4,postDate);
         statement.setString(5,content);
+        statement.setBoolean(6,updated);
 
         statement.execute();
         statement.close();
@@ -71,13 +73,15 @@ public class MessageMapper {
 
         conn = getCon();
 
-        String query = "UPDATE post SET title=?, postDate=?, content=? WHERE postId=?";
+        String query = "UPDATE post SET title=?, postDate=?, content=?, updated = ? WHERE postId=?";
         PreparedStatement ps = conn.prepareStatement(query);
 
         ps.setString(1, post.getTitle());
         ps.setString(2, post.getPostDate());
         ps.setString(3, post.getContent());
-        ps.setString(4, post.getPostId());
+        ps.setBoolean(4, post.isEdited());
+        ps.setString(5, post.getPostId());
+
 
         int i = ps.executeUpdate();
 
@@ -149,7 +153,7 @@ public class MessageMapper {
         post.setTitle( rs.getString("title") );
         post.setPostDate( rs.getString("postDate") );
         post.setContent( rs.getString("content") );
-        //post.setAttachBlob( rs.getBlob("attachment") );
+        post.setEdited(rs.getBoolean("updated"));
 
         Attachment attachment = extractAttachFromResultSet(post.getPostId());
         post.setAttachment(attachment);
@@ -173,6 +177,7 @@ public class MessageMapper {
             post.setTitle(rs.getString("title"));
             post.setPostDate(rs.getString("postDate"));
             post.setContent(rs.getString("content"));
+            post.setEdited(rs.getBoolean("updated"));
         }
         Attachment attachment = extractAttachFromResultSet(post.getPostId());
         post.setAttachment(attachment);
@@ -228,7 +233,7 @@ public class MessageMapper {
 
     }
 
-    public boolean updateAttach(Attachment attachment) throws Exception {
+    /*public boolean updateAttach(Attachment attachment) throws Exception {
 
         conn = getCon();
 
@@ -250,7 +255,7 @@ public class MessageMapper {
         }
 
         return false;
-    }
+    }*/
 
     public boolean deleteAttach(String postId) throws Exception {
 
@@ -319,7 +324,7 @@ public class MessageMapper {
         List<Post> selectedPosts = new ArrayList<>();
 
         for(Post post : posts){
-            if(post.compareTo((Object)start) >= 0 && post.compareTo((Object)end) <= 0)
+            if(post.compareToString((Object)start) >= 0 && post.compareToString((Object)end) <= 0)
                 selectedPosts.add(post);
         }
         return selectedPosts;

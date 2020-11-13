@@ -77,6 +77,7 @@ public class ModelController {
 
         //get current user's posts from DB
         List<Post> posts = messageMapper.getUserPost(userId);
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
 
         return "postMessage";
@@ -112,10 +113,12 @@ public class ModelController {
             Attachment attachment = new Attachment(attachId, oldPost.getPostId(), fileName, fileType, fileSize, blob);
             // show edited if attachment is updated
             //----------------------------------------------------------------
-            attachment.setEdited(true);
+            //attachment.setEdited(true);
             oldPost.setAttachment(attachment);
         }
-
+        // show edited if post is updated
+        //----------------------------------------------------------------
+        oldPost.setEdited(true);
         messageMapper.updatePost(oldPost);
         List<Post> posts = messageMapper.getUserPost(userId);
         //--------------------sort posts---------------
@@ -135,10 +138,9 @@ public class ModelController {
     public String allPosts(Model model) throws Exception {
 
         messageMapper = new MessageMapper();
-       List<Post> posts = messageMapper.getAllPost();
+        List<Post> posts = messageMapper.getAllPost(number);
         //-----------------------------sort posts by time-------------------------
         Collections.sort(posts);
-        posts = messageMapper.getAllPost(number);
         model.addAttribute("posts", posts);
 
         return "viewMessage";
@@ -150,6 +152,7 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
         return "postMessage";
     }
@@ -169,8 +172,7 @@ public class ModelController {
                          @RequestParam(value = "userId") String userId,
                          @RequestParam(value = "from") String from,
                          @RequestParam(value = "to") String to,
-                         Model model,
-                         HttpSession session) throws Exception {
+                         Model model) throws Exception {
 
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
@@ -192,6 +194,7 @@ public class ModelController {
         else {
             model.addAttribute("errorMsg", "*Error: Invalid Data format");
         }
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
         return "viewMessage";
     }
@@ -208,7 +211,7 @@ public class ModelController {
     }
 
     @RequestMapping(value = "/file/{postId}", method = RequestMethod.GET)
-    public String updateStudy(@PathVariable ("postId") String postId,
+    public String uploadAttach(@PathVariable ("postId") String postId,
                               Model model,
                               HttpServletResponse response) throws Exception {
 
@@ -228,6 +231,30 @@ public class ModelController {
         out.close();
 
         return "viewMessage";
+    }
+
+    @RequestMapping(value = "/deleteAttach/{postId}", method = RequestMethod.GET)
+    public String deleteAttach(@PathVariable ("postId") String postId,
+                               Model model,
+                               HttpSession session) throws Exception {
+
+        messageMapper = new MessageMapper();
+        String userId = (String)session.getAttribute("userId");
+        Post post = messageMapper.extractSpecificPost(postId);
+
+        Boolean delete = messageMapper.deleteAttach(post.getPostId());
+        Attachment attachment = new Attachment();
+        post.setAttachment(attachment);
+        String postTime = messageMapper.getPostTime();
+        post.setPostDate(postTime);
+        post.setEdited(true);
+
+        messageMapper.updatePost(post);
+        List<Post> posts = messageMapper.getUserPost(userId);
+        Collections.sort(posts);
+        model.addAttribute("posts", posts);
+
+        return "postMessage";
     }
 
 }
