@@ -4,9 +4,12 @@ import com.concordia.message_board.entities.Attachment;
 import com.concordia.message_board.entities.Post;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MessageMapper {
@@ -106,6 +109,21 @@ public class MessageMapper {
         conn.close();
         return allPost;
     }
+
+    public List<Post> getAllPost() throws Exception {
+        conn = getCon();
+        List<Post> allPost = new ArrayList<>();
+        Statement stm = conn.createStatement();
+        ResultSet result = stm.executeQuery("select * from post");
+
+        while (result.next()){
+            Post post = extractPostFromResultSet(result);
+            allPost.add(post);
+        }
+        conn.close();
+        return allPost;
+    }
+
     // get User's Posts
     public List<Post> getUserPost(String id) throws Exception {
         conn = getCon();
@@ -265,6 +283,87 @@ public class MessageMapper {
         LocalDateTime now = LocalDateTime.now();
         String date = formatter.format(now);
         return date;
+    }
+
+    public List<Post> getPostsByHashTag(String inputTag, List<Post> posts){
+
+        List<Post> selectedPosts = new ArrayList<>();
+
+        for (int i=0; i< posts.size(); i++){
+            String content = posts.get(i).getContent();
+            String[] tags = getHashTags(content);
+            for (int j=0; j< tags.length; j++){
+                if (tags[j].toLowerCase().contains(inputTag)){
+                    selectedPosts.add(posts.get(i));
+                    break;
+                }
+            }
+        }
+        return selectedPosts;
+    }
+
+    public List<Post> getPostsByUserId(String userId, List<Post> posts){
+
+        List<Post> selectedPosts = new ArrayList<>();
+
+        for (int i=0; i< posts.size(); i++){
+            if (posts.get(i).getUserId().equals(userId)){
+                selectedPosts.add(posts.get(i));
+            }
+        }
+        return selectedPosts;
+    }
+
+    public List<Post> getPostsByDate(String start, String end, List<Post> posts){
+
+        List<Post> selectedPosts = new ArrayList<>();
+
+        for(Post post : posts){
+            if(post.compareTo((Object)start) >= 0 && post.compareTo((Object)end) <= 0)
+                selectedPosts.add(post);
+        }
+        return selectedPosts;
+    }
+
+    public String[] getHashTags(String content){
+
+        String[] split = content.split("\\#");
+        String[] tags = new String[split.length-1];
+
+        //String[] tags = Arrays.copyOfRange(oldArr, 1, oldArr.length);
+        for (int i=1; i< split.length; i++){
+            tags[i-1]= split[i];
+        }
+        return tags;
+    }
+
+    public boolean validateFormat(String dateStr){
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        try{
+            //format check
+            Date date = format.parse(dateStr);
+        }catch(Exception e){
+            System.out.println("false");
+            return false;
+        }
+
+        int[] ans = new int[6];
+
+        //int year,month,day,hour,minute,second ;
+        ans[0] = Integer.valueOf(dateStr.substring(0, 4));
+        ans[1] = Integer.valueOf(dateStr.substring(5, 7));
+        ans[2] = Integer.valueOf(dateStr.substring(8, 10));
+        ans[3] = Integer.valueOf(dateStr.substring(11, 13));
+        ans[4] = Integer.valueOf(dateStr.substring(14, 16));
+        ans[5] = Integer.valueOf(dateStr.substring(17, 19));
+
+        // logic check
+        if(ans[0] < 0 || ans[1] < 1 || ans[1] > 12 || ans[2] < 0 || ans[2] > 31 ||
+                ans[3] < 0 || ans[3] > 23 || ans[4] < 0 || ans[4] > 59 ||ans[5] < 0 || ans[5] >59){
+
+            return false;
+        }
+        return true;
     }
 
 }
