@@ -5,9 +5,16 @@
     <title>Message Board</title>
 </head>
 <body>
+<form action="" th:action="@{/back}" method="GET">
+    <input type="submit" name="back" value="Back"/>
+</form>
 <div id="content" style="text-align: center">
     <table width="60%" id="table1" th:each="post : ${posts}">
-        <tr id="message" >
+        <tr>
+            <td>User</td>
+            <td id="user" th:text="${post.getUserId()}"></td>
+        </tr>
+        <tr>
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
         </tr>
@@ -41,12 +48,19 @@
     </table>
 </div>
 <br/><br/>
-<div style="text-align: center;">
-    <form action="" th:action="@{/back}" method="GET">
-        <input type="submit" name="back" value="Back"/>
-    </form>
+<div style="margin: 100px;">
     <!--<a href="postMessage.html"><button class="bt"> Back </button></a>-->
-    <a href=""><button class="bt"> Search </button></a>
+    <fieldset>
+        <form action="" style="margin: 5px" th:action="@{/search}" method="GET">
+            <input style="margin: 5px" type="text" name="tag" placeholder="Enter Tag"/><br>
+            <input style="margin: 5px" type="text" name="userId" placeholder="Enter UserId"/><br>
+            From<input style="margin: 5px" type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
+            to<input style="margin: 5px" type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/><br>
+            <p th:text="${errorMsg}" style="color:red"></p>
+            <input style="margin: 5px" type="submit" name="back" value="Search"/>
+        </form>
+    </fieldset>
+    <!--<a href=""><button class="bt"> Search </button></a>-->
 </div>
 
 </body>

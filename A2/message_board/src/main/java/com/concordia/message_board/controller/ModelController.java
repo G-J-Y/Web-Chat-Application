@@ -5,6 +5,7 @@ import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,8 @@ public class ModelController {
         return "Ok";
     }
 
-
+    @Value("${display.number}")
+    private String number;
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public String post(@RequestParam(value = "title",required = false) String title,
@@ -95,13 +97,11 @@ public class ModelController {
         oldPost.setTitle(title);
         oldPost.setPostDate(date);
         oldPost.setContent(content);
-        // show edited if attachment is updated
-        //----------------------------------------------------------------
-        oldPost.setEdited(true);
+
+        Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
 
         if (!file.isEmpty()) {
-            Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
-
+            //Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
             String fileName = file.getOriginalFilename();
             String fileType = file.getContentType();
             Long fileSize = file.getSize();
@@ -110,11 +110,16 @@ public class ModelController {
 
             String attachId = UUID.randomUUID().toString().substring(0,12);
             Attachment attachment = new Attachment(attachId, oldPost.getPostId(), fileName, fileType, fileSize, blob);
+            // show edited if attachment is updated
+            //----------------------------------------------------------------
+            attachment.setEdited(true);
             oldPost.setAttachment(attachment);
         }
 
         messageMapper.updatePost(oldPost);
         List<Post> posts = messageMapper.getUserPost(userId);
+        //--------------------sort posts---------------
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
 
         return "postMessage";
@@ -130,9 +135,10 @@ public class ModelController {
     public String allPosts(Model model) throws Exception {
 
         messageMapper = new MessageMapper();
-        List<Post> posts = messageMapper.getAllPost();
+       List<Post> posts = messageMapper.getAllPost();
         //-----------------------------sort posts by time-------------------------
         Collections.sort(posts);
+        posts = messageMapper.getAllPost(number);
         model.addAttribute("posts", posts);
 
         return "viewMessage";
@@ -150,12 +156,44 @@ public class ModelController {
 
     @GetMapping("/back")
     public String back(Model model,
-                              HttpSession session) throws Exception {
+                       HttpSession session) throws Exception {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
         model.addAttribute("posts", posts);
         return "postMessage";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "tag") String tag,
+                         @RequestParam(value = "userId") String userId,
+                         @RequestParam(value = "from") String from,
+                         @RequestParam(value = "to") String to,
+                         Model model,
+                         HttpSession session) throws Exception {
+
+        messageMapper = new MessageMapper();
+        List<Post> posts = messageMapper.getAllPost();
+        if (!tag.equals("")) {
+            posts = messageMapper.getPostsByHashTag(tag, posts);
+        }
+        if (!userId.equals("")) {
+            posts = messageMapper.getPostsByUserId(userId, posts);
+        }
+        if (from == "" || from == null){
+            from = "1900/01/01 00:00:00";
+        }
+        if (to == "" ||  to == null){
+            to = "2050/12/30 00:00:00";
+        }
+        if ( messageMapper.validateFormat(from) && messageMapper.validateFormat(to)) {
+            posts = messageMapper.getPostsByDate(from,to,posts);
+        }
+        else {
+            model.addAttribute("errorMsg", "*Error: Invalid Data format");
+        }
+        model.addAttribute("posts", posts);
+        return "viewMessage";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)

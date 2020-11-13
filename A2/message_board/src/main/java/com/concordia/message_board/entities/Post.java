@@ -112,6 +112,8 @@ public class Post implements Comparable{
                 '}';
     }
 //--------------------helper to sort Posts---------------------------
+
+    //convert string date to int type which is comparable
     public int[] strToInt(String date){
         int[] ans = new int[6];
         try {
@@ -122,6 +124,7 @@ public class Post implements Comparable{
             ans[4] = Integer.valueOf(date.substring(14, 16));
             ans[5] = Integer.valueOf(date.substring(17, 19));
         }catch(NumberFormatException e){
+
             System.out.println("The input format is invalid...");
         }
         return ans;
@@ -139,4 +142,7 @@ public class Post implements Comparable{
         }
         return 0;
     }
-}
+
+    }
+
+
