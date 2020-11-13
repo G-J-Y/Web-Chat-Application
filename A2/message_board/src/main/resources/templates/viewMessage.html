@@ -42,7 +42,7 @@
         <tr>
             <td>Edition</td>
             <!-------------------add condition to display the message------------------->
-            <td id="edited" th:if="${post.getAttachment().isEdited() == true} " th:text = "Edited"></td>
+            <td id="edited" th:if="${post.isEdited() == true} " th:text = "Updated"></td>
         </tr>
         <br/><br/>
     </table>

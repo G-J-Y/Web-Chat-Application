@@ -25,9 +25,9 @@
                         <!--<td width="90%" ><input id="attachment" name="attachment" /></td>-->
                         <td>
                             <input type="file" name="file">
-                            <div th:if="${uploadMessage}">
+                            <!--<div th:if="${uploadMessage}">
                                 <p th:text="${uploadMessage}"/>
-                            </div>
+                            </div>-->
                         </td>
                     </center>
                 </tr>
@@ -49,7 +49,7 @@
 
 <div id="content" style="text-align: center">
     <h2>Post History</h2>
-    <table width="60%" id="table" th:each="post : ${posts}">
+    <table width="100%" id="table" th:each="post : ${posts}">
         <tr id="message" >
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
@@ -64,9 +64,22 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>
+            <td>
+                <a th:href="@{/file/{postId} (postId = ${post.getPostId()})}" th:text="${post.getAttachment().getFileName()}"></a>
+            </td>
+            <td>
+                <a th:href="@{/deleteAttach/{postId} (postId = ${post.getPostId()})}">
+                    <button>Delete Attach</button>
+                </a>
+            </td>
         </tr>
-        <br>
+        <tr>
+            <td>Edition</td>
+            <!-------------------add condition to display the message------------------->
+            <td id="edited" th:if="${post.isEdited() == true} " th:text = "Updated"></td>
+        </tr>
+        <br/><br/>
+
         <form action="" th:action="@{/delete}" method="POST" >
             <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
             <input type="submit" name="delete" value="Delete"/>

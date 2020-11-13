@@ -11,7 +11,7 @@ public class Post implements Comparable{
     private String content;
     private String postDate;
     //private Blob attachBlob;
-    private boolean edited = false;
+    private boolean edited;
     private Attachment attachment;
 
     public Post() {
@@ -25,6 +25,7 @@ public class Post implements Comparable{
         this.postDate = postDate;
         //this.attachBlob = attachBlob;
         this.attachment = attachment;
+        this.edited = false;
     }
 
     public Post(Post copyPost){
@@ -124,7 +125,6 @@ public class Post implements Comparable{
             ans[4] = Integer.valueOf(date.substring(14, 16));
             ans[5] = Integer.valueOf(date.substring(17, 19));
         }catch(NumberFormatException e){
-
             System.out.println("The input format is invalid...");
         }
         return ans;
@@ -139,6 +139,18 @@ public class Post implements Comparable{
         int [] targetArr = ((Post) o).strToInt(targetDate);
         for(int i = 0; i < thisArr.length; i++){
             if(thisArr[i] != targetArr[i]) return thisArr[i] > targetArr[i] ? -1 : 1;
+        }
+        return 0;
+    }
+
+    public int compareToString(Object o) {
+        String str1 = this.postDate;
+        String str2 = (String) o;
+        int[] origin = strToInt(str1);
+        int[] opponent = strToInt(str2);
+        for(int i = 0; i < origin.length; i++){
+            if(origin[i] > opponent[i]) return 1;
+            else if(origin[i] < opponent[i]) return -1;
         }
         return 0;
     }

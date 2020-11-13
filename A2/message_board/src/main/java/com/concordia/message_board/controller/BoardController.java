@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.nio.file.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -39,18 +41,24 @@ public class BoardController {
     @PostMapping("/authentication")
     public String authentication(@RequestParam("userId") String userId,
                                  @RequestParam("password") String password,
-                                 Map<String,Object> map, HttpSession session){
+                                 Model model, HttpSession session) throws Exception {
         System.out.println("Number---->"+number);
 
         if(postManager.authentication(userId, password)){
             session.setAttribute("userId",userId);
-            return "redirect:/postMessage.html";
+            // show post history
+            messageMapper = new MessageMapper();
+            List<Post> posts = messageMapper.getUserPost(userId);
+            Collections.sort(posts);
+            model.addAttribute("posts", posts);
+            //return "redirect:/postMessage.html";
+            return "postMessage";
         }
         return "error";
     }
 
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String upload(@RequestParam("file") MultipartFile file, Model model){
         if (file.isEmpty()){
             model.addAttribute("uploadMessage", "The file is empty!");
@@ -67,5 +75,5 @@ public class BoardController {
             e.printStackTrace();
         }
         return "postMessage";
-    }
+    }*/
 }
