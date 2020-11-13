@@ -138,7 +138,7 @@ public class Post implements Comparable{
         int[] thisArr = this.strToInt(thisDate);
         int [] targetArr = ((Post) o).strToInt(targetDate);
         for(int i = 0; i < thisArr.length; i++){
-            if(thisArr[i] != targetArr[i]) return thisArr[i] > targetArr[i] ? 1 : -1;
+            if(thisArr[i] != targetArr[i]) return thisArr[i] > targetArr[i] ? -1 : 1;
         }
         return 0;
     }
