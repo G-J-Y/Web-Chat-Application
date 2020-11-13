@@ -1,5 +1,5 @@
 display:
-  number: 12
+  number: 10
 
 spring:
   datasource:

@@ -155,12 +155,44 @@ public class ModelController {
 
     @GetMapping("/back")
     public String back(Model model,
-                              HttpSession session) throws Exception {
+                       HttpSession session) throws Exception {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
         model.addAttribute("posts", posts);
         return "postMessage";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "tag") String tag,
+                         @RequestParam(value = "userId") String userId,
+                         @RequestParam(value = "from") String from,
+                         @RequestParam(value = "to") String to,
+                         Model model,
+                         HttpSession session) throws Exception {
+
+        messageMapper = new MessageMapper();
+        List<Post> posts = messageMapper.getAllPost();
+        if (!tag.equals("")) {
+            posts = messageMapper.getPostsByHashTag(tag, posts);
+        }
+        if (!userId.equals("")) {
+            posts = messageMapper.getPostsByUserId(userId, posts);
+        }
+        if (from == "" || from == null){
+            from = "1900/01/01 00:00:00";
+        }
+        if (to == "" ||  to == null){
+            to = "2050/12/30 00:00:00";
+        }
+        if ( messageMapper.validateFormat(from) && messageMapper.validateFormat(to)) {
+            posts = messageMapper.getPostsByDate(from,to,posts);
+        }
+        else {
+            model.addAttribute("errorMsg", "*Error: Invalid Data format");
+        }
+        model.addAttribute("posts", posts);
+        return "viewMessage";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
