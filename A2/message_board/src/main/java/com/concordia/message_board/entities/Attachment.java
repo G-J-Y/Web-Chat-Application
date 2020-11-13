@@ -11,10 +11,20 @@ public class Attachment {
     private String fileType;
     private long fileSize;
     private Blob blob;
+    //---------------------initialize isEdited as false----------------------
+    private boolean isEdited = false;
 
     public Attachment() {
         fileName = "";
         fileType = "";
+    }
+   //-------------------------get edited method-------------------------
+    public boolean isEdited() {
+        return isEdited;
+    }
+  //--------------------------set edited method-------------------------
+    public void setEdited(boolean edited) {
+        isEdited = edited;
     }
 
     public Attachment(String attachId, String postId, String fileName, String fileType, long fileSize, Blob blob) {

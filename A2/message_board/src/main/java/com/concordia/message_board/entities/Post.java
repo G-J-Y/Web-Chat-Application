@@ -3,8 +3,8 @@ package com.concordia.message_board.entities;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.util.Arrays;
-
-public class Post {
+//---------------------------------add interface--------------------
+public class Post implements Comparable{
     private String userId;
     private String postId;
     private String title;
@@ -110,5 +110,33 @@ public class Post {
                 ", date='" + postDate + '\'' +
                 ", attachment=" + attachment.getFileName() +'\'' +
                 '}';
+    }
+//--------------------helper to sort Posts---------------------------
+    public int[] strToInt(String date){
+        int[] ans = new int[6];
+        try {
+            ans[0] = Integer.valueOf(date.substring(0, 4));
+            ans[1] = Integer.valueOf(date.substring(5, 7));
+            ans[2] = Integer.valueOf(date.substring(8, 10));
+            ans[3] = Integer.valueOf(date.substring(11, 13));
+            ans[4] = Integer.valueOf(date.substring(14, 16));
+            ans[5] = Integer.valueOf(date.substring(17, 19));
+        }catch(NumberFormatException e){
+            System.out.println("The input format is invalid...");
+        }
+        return ans;
+    }
+// add compareTo to sort the posts in ArrayList by date
+    //--------------------------implement compareTo method--------------------------------------
+    @Override
+    public int compareTo(Object o) {
+        String thisDate = this.getPostDate();
+        String targetDate = ((Post) o).getPostDate();
+        int[] thisArr = this.strToInt(thisDate);
+        int [] targetArr = ((Post) o).strToInt(targetDate);
+        for(int i = 0; i < thisArr.length; i++){
+            if(thisArr[i] != targetArr[i]) return thisArr[i] > targetArr[i] ? 1 : -1;
+        }
+        return 0;
     }
 }

@@ -34,7 +34,8 @@
         </tr>
         <tr>
             <td>Edition</td>
-            <td id="edited" th:text = "Edited"></td>
+            <!-------------------add condition to display the message------------------->
+            <td id="edited" th:if="${post.getAttachment().isEdited() == true} " th:text = "Edited"></td>
         </tr>
         <br/><br/>
     </table>

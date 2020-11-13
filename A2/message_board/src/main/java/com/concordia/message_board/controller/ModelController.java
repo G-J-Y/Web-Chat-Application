@@ -9,23 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.synchronoss.cloud.nio.multipart.util.IOUtils;
-
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import static java.sql.JDBCType.BLOB;
 
 @Controller
 public class ModelController {
@@ -103,6 +95,9 @@ public class ModelController {
         oldPost.setTitle(title);
         oldPost.setPostDate(date);
         oldPost.setContent(content);
+        // show edited if attachment is updated
+        //----------------------------------------------------------------
+        oldPost.setEdited(true);
 
         if (!file.isEmpty()) {
             Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
@@ -136,6 +131,8 @@ public class ModelController {
 
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
+        //-----------------------------sort posts by time-------------------------
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
 
         return "viewMessage";

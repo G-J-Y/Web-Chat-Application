@@ -29,6 +29,13 @@ public class BoardController {
         return "login";
     }
 
+    //-----------------------set logout controller---------------------------
+    @GetMapping("/logout")
+    public String logOut(HttpSession session){
+        session.setAttribute("userId",null);
+        return "logout";
+    }
+
     @PostMapping("/authentication")
     public String authentication(@RequestParam("userId") String userId,
                                  @RequestParam("password") String password,
@@ -39,11 +46,8 @@ public class BoardController {
             session.setAttribute("userId",userId);
             return "redirect:/postMessage.html";
         }
-
-
         return "error";
     }
-
 
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
