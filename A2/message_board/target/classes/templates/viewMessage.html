@@ -5,11 +5,14 @@
     <title>Message Board</title>
     <script src="../static/asserts/js/bootstrap.js"></script>
     <link rel="stylesheet" href="../static/asserts/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/asserts/css/viewMessage.css">
 </head>
 <body>
 <form action="" th:action="@{/back}" method="GET">
     <input type="submit" name="back" value="Back"/>
 </form>
+<img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
+
 <div id="content" style="text-align: center">
     <table width="60%" id="table1" th:each="post : ${posts}">
         <tr>
