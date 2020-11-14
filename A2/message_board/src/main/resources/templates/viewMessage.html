@@ -8,13 +8,16 @@
     <link rel="stylesheet" href="../static/asserts/css/viewMessage.css">
 </head>
 <body>
-<form action="" th:action="@{/back}" method="GET">
-    <input type="submit" name="back" value="Back"/>
-</form>
 <img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
+<div style="text-align: center">
+    <form action="" th:action="@{/back}" method="GET">
+        <button class="btn btn-primary" type="submit" name="back">Back</button>
+    </form>
+</div>
+
 
 <div id="content" style="text-align: center">
-    <table width="60%" id="table1" th:each="post : ${posts}">
+    <table class="table table-hover table-bordered" width="60%" id="table1" th:each="post : ${posts}">
         <tr>
             <td>User</td>
             <td id="user" th:text="${post.getUserId()}"></td>
@@ -52,19 +55,22 @@
         <br/><br/>
     </table>
 </div>
-<br/><br/>
-<div style="margin: 100px;">
+
+<div>
     <!--<a href="postMessage.html"><button class="bt"> Back </button></a>-->
-    <fieldset>
-        <form action="" style="margin: 5px" th:action="@{/search}" method="GET">
-            <input style="margin: 5px" type="text" name="tag" placeholder="Enter Tag"/><br>
-            <input style="margin: 5px" type="text" name="userId" placeholder="Enter UserId"/><br>
-            From<input style="margin: 5px" type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
-            to<input style="margin: 5px" type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/><br>
-            <p th:text="${errorMsg}" style="color:red"></p>
-            <input style="margin: 5px" type="submit" name="back" value="Search"/>
+        <form class="f" action="" th:action="@{/search}" method="GET">
+            <fieldset>
+                <div id="div1" style="text-align: center" class="col-sm-3">
+                <input style="margin-bottom: 10px" class="form-control" type="text" name="tag" placeholder="Enter Tag"/>
+                <input class="form-control"  type="text" name="userId" placeholder="Enter UserId"/>
+                From<input id="date1" class="form-control" type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>
+                to<input id="date2" class="form-control" type="text" name="to" placeholder="yyyy/mm/dd hh:mm:ss"/>
+                <p th:text="${errorMsg}" style="color:red"></p>
+                <button class="btn btn-primary" type="submit" name="back">Search</button>
+                </div>
+
+            </fieldset>
         </form>
-    </fieldset>
     <!--<a href=""><button class="bt"> Search </button></a>-->
 </div>
 
