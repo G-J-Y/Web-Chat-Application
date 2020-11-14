@@ -5,17 +5,17 @@ body
 
 div
 {
-    margin-top: 100px;
+    margin-top: 5px;
     text-align: center;
 }
 input
 {
     font-size: 20px;
-    margin-bottom: 150px;
+    margin-bottom: 100px;
 }
 label
 {
-    margin-bottom: 100px;
+    margin-bottom: 70px;
     font-size: 40px;
 }
 h1
@@ -27,4 +27,13 @@ button
 {
     width: 200px;
     height: 50px;
+}
+
+.mb-4
+{
+    height: 200px;
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+    vertical-align: middle;
 }

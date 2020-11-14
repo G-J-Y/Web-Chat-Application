@@ -6,5 +6,14 @@ p
 
 div
 {
-    margin-top: 200px;
+    margin-top: 20px;
+}
+
+.mb-4
+{
+    height: 200px;
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+    vertical-align: middle;
 }
