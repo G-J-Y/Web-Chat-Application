@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Message Board</title>
+    <link rel="stylesheet" href= "../static/asserts/css/login.css">
+    <script src="../static/asserts/js/bootstrap.js"></script>
 </head>
 <body>
 <form action="" th:action="@{/back}" method="GET">
@@ -42,7 +44,7 @@
         <tr>
             <td>Edition</td>
             <!-------------------add condition to display the message------------------->
-            <td id="edited" th:if="${post.getAttachment().isEdited() == true} " th:text = "Edited"></td>
+            <td id="edited" th:if="${post.isEdited() == true} " th:text = "Updated"></td>
         </tr>
         <br/><br/>
     </table>
