@@ -3,42 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="../static/asserts/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../static/asserts/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/asserts/css/editMessage.css">
 </head>
 <body>
-<form action="" th:action="@{/updatePost}" method="post" enctype="multipart/form-data">
-    <table align="center">
-        <tr>
-            <td style=" font-weight:bold; width:10%" >Title：</td>
-            <td width="60%" ><textarea id="title" cols="60" rows="1" name="title" th:text="${post.getTitle()}"></textarea></td>
-        </tr>
+    <img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
+    <div id="form">
+    <form action="" th:action="@{/updatePost}" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <div id="div1" class="form-group">
+                <label>Title:</label>
+                <input class="form-control" id="title" name="title" th:text="${post.getTitle()}"></input>
+            </div>
+            <div id="div2" class="form-group">
+                <label>Content:</label>
+                <br>
+                <textarea class="form-control" id="textarea" cols="60" rows="10"  name="content" th:text="${post.getContent()}"></textarea>
+            </div>
+            <div id="div3" class="form-group">
+                <label id="attachment">Attachment:</label>
+                <input id="file" class="form-control-file" type="file" name="file" >
+            </div>
 
-        <tr>
-            <td style="font-weight:bold; width:10%" > Content：</td>
-            <td ><textarea id="textarea" cols="60" rows="10"  name="content" th:text="${post.getContent()}"></textarea> </td>
-        </tr>
+            <!--<td width="90%" ><input id="attachment" name="attachment" />-->
 
-        <tr>
-            <center>
-                <td style="font-weight:bold; width:10%" >Attachment：</td>
-                <!--<td width="90%" ><input id="attachment" name="attachment" /></td>-->
-                <td>
-                    <input type="file" name="file" >
-                    <!--<div th:if="${uploadMessage}">
-                        <p th:text="${uploadMessage}"/>
-                    </div>-->
-                </td>
-            </center>
-        </tr>
+            <!--<div th:if="${uploadMessage}">
+               <p th:text="${uploadMessage}"/>
+            </div>-->
+            <div>
+                <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
+            </div>
 
-        <tr >
-            <td colspan="2">
-                <center>
-                    <input type="text" name="postId" th:value="${post.getPostId()}" hidden/>
-                    <input type="submit" name="repost" value="Finish and Post" />
-                </center>
-            </td>
-        </tr>
-    </table>
-</form>
+        </fieldset>
+        <div id="div4">
+            <button class="btn  btn-primary " id="button" type="submit" name="repost"/>Finish and Post</button>
+        </div>
+    </form>
+    </div>
+
 </body>
 </html>

@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Message Board</title>
+    <script src="../static/asserts/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../static/asserts/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/asserts/css/viewMessage.css">
 </head>
 <body>
+<img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
 <form action="" th:action="@{/back}" method="GET">
-    <input type="submit" name="back" value="Back"/>
+    <button class="btn btn-primary" type="submit" name="back">Back</button>
 </form>
+
 <div id="content" style="text-align: center">
-    <table width="60%" id="table1" th:each="post : ${posts}">
+    <table class="table table-hover" width="60%" id="table1" th:each="post : ${posts}">
         <tr>
             <td>User</td>
             <td id="user" th:text="${post.getUserId()}"></td>
@@ -48,10 +53,11 @@
     </table>
 </div>
 <br/><br/>
-<div style="margin: 100px;">
+<div>
     <!--<a href="postMessage.html"><button class="bt"> Back </button></a>-->
-    <fieldset>
         <form action="" style="margin: 5px" th:action="@{/search}" method="GET">
+            <fieldset>
+
             <input style="margin: 5px" type="text" name="tag" placeholder="Enter Tag"/><br>
             <input style="margin: 5px" type="text" name="userId" placeholder="Enter UserId"/><br>
             From<input style="margin: 5px" type="text" name="from" placeholder="yyyy/mm/dd hh:mm:ss"/>

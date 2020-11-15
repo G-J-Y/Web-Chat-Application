@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete a post</title>
+    <script src="../static/asserts/js/bootstrap.js"></script>
+    <link href="src/main/resources/static/asserts/css/delete.css" th:type="css">
+    <link rel="stylesheet" href="../static/asserts/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/asserts/css/delete.css">
 </head>
 <body>
-    <div>
+        <img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
+
+        <h1 class="alert-warning">Delete your post here</h1>
+        <div>
         <form th:action="@{/delete}" method="post">
-        <label>Type your target post Id</label>
+            <label>Type your target post Id</label>
+            <br>
             <input type="text" placeholder="UserId" name="userId" >
-            <button class="btn btn-lg btn-primary btn-block" type="submit" >Delete</button>
+            <br>
+            <button class="btn btn-primary" type="submit" >Delete</button>
         </form>
 
     </div>
