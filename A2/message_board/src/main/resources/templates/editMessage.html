@@ -14,7 +14,8 @@
         <fieldset>
             <div id="div1" class="form-group">
                 <label>Title:</label>
-                <input class="form-control" id="title" name="title" th:text="${post.getTitle()}"></input>
+                <br>
+                <textarea class="form-control" id="title" cols="60" rows="1" name="title" th:text="${post.getTitle()}"></textarea>
             </div>
             <div id="div2" class="form-group">
                 <label>Content:</label>

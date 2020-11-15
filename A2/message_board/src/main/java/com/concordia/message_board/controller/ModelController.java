@@ -204,7 +204,7 @@ public class ModelController {
                        @RequestParam(value = "file",required = false) Attachment file,
                        Model model, HttpSession session) throws Exception {
 
-
+        messageMapper = new MessageMapper();
         Post oldPost = messageMapper.extractSpecificPost(postId);
         model.addAttribute("post",oldPost);
         return "editMessage";
