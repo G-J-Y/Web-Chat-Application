@@ -211,7 +211,7 @@ public class ModelController {
     }
 
     @RequestMapping(value = "/file/{postId}", method = RequestMethod.GET)
-    public String uploadAttach(@PathVariable ("postId") String postId,
+    public String downloadeAttach(@PathVariable ("postId") String postId,
                               Model model,
                               HttpServletResponse response) throws Exception {
 
