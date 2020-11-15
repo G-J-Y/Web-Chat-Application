@@ -42,7 +42,6 @@ public class BoardController {
     public String authentication(@RequestParam("userId") String userId,
                                  @RequestParam("password") String password,
                                  Model model, HttpSession session) throws Exception {
-        System.out.println("Number---->"+number);
 
         if(postManager.authentication(userId, password)){
             session.setAttribute("userId",userId);
