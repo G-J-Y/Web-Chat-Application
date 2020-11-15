@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Message Board</title>
-    <script src="../static/asserts/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="../static/asserts/css/bootstrap.css">
-    <link rel="stylesheet" href="../static/asserts/css/viewMessage.css">
+    <script src="/asserts/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/asserts/css/bootstrap.css">
+    <link rel="stylesheet" href="/asserts/css/viewMessage.css">
 </head>
 <body>
-<img name="logo" class="mb-4" src="../static/asserts/img/newlogo.png" alt="">
+<img name="logo" class="mb-4" src="/asserts/img/newlogo.png" width="72" height="72" alt="">
 <div style="text-align: center">
     <form action="" th:action="@{/back}" method="GET">
         <button class="btn btn-primary" type="submit" name="back">Back</button>
@@ -17,7 +17,7 @@
 
 
 <div id="content" style="text-align: center">
-    <table class="table table-hover table-bordered" width="60%" id="table1" th:each="post : ${posts}">
+    <table class="table table-hover table-bordered" id="table1" th:each="post : ${posts}">
         <tr>
             <td>User</td>
             <td id="user" th:text="${post.getUserId()}"></td>
@@ -35,7 +35,7 @@
         </tr>-->
         <tr>
             <td>Content</td>
-            <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
+            <td id="text" th:text="${post.getContent()}"></td>
         </tr>
         <tr>
             <td>Date</td>
