@@ -46,12 +46,12 @@ public class BoardController {
         if(postManager.authentication(userId, password)){
             session.setAttribute("userId",userId);
             // show post history
+
             messageMapper = new MessageMapper();
             List<Post> posts = messageMapper.getUserPost(userId);
             Collections.sort(posts);
             model.addAttribute("posts", posts);
-            //return "redirect:/postMessage.html";
-            return "postMessage";
+            return "redirect:/postMessage.html";
         }
         return "error";
     }

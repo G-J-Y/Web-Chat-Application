@@ -36,7 +36,7 @@ public class ModelController {
     @GetMapping("/ok")
     public String ok(HttpSession session){
         System.out.println(session.getAttribute("userId"));
-        return "Ok";
+        return "viewMessage";
     }
 
     @Value("${display.number}")
