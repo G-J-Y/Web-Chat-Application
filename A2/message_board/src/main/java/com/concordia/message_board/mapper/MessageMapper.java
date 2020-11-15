@@ -17,7 +17,7 @@ public class MessageMapper {
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
     private String serverName = "root";
-    private String password = "comp353";
+    private String password = "";
 
     public MessageMapper(){
     }
