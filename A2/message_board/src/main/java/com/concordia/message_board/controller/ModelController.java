@@ -204,14 +204,14 @@ public class ModelController {
                        @RequestParam(value = "file",required = false) Attachment file,
                        Model model, HttpSession session) throws Exception {
 
-
+        messageMapper = new MessageMapper();
         Post oldPost = messageMapper.extractSpecificPost(postId);
         model.addAttribute("post",oldPost);
         return "editMessage";
     }
 
     @RequestMapping(value = "/file/{postId}", method = RequestMethod.GET)
-    public String uploadAttach(@PathVariable ("postId") String postId,
+    public String downloadeAttach(@PathVariable ("postId") String postId,
                               Model model,
                               HttpServletResponse response) throws Exception {
 
