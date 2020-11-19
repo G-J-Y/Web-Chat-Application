@@ -19,7 +19,7 @@ public class MvcConfig implements WebMvcConfigurer {
    @Override
     public void addInterceptors(InterceptorRegistry registry) {
       registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").
-           excludePathPatterns("/","/index.html","/authentication");
+           excludePathPatterns("/","/index.html","/authentication", "/webjars/**");
     }
 
     @Override
