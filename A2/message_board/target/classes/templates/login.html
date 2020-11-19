@@ -9,7 +9,7 @@
 		<!-- Custom styles for this template -->
 		<link th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" rel="stylesheet">
 		<!-- Custom styles for this template-->
-		<link th:href="@{/asserts/css/signin.css}" rel="stylesheet">
+		<link th:href="@{/asserts/css/login.css}" rel="stylesheet">
 	</head>
 
 	<body class="text-center">
@@ -27,11 +27,19 @@
 			</label>
 		</div>
 		<button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+		<button class="btn btn-lg btn-secondary btn-block" onclick="noFeature()">Sign up</button>
 		<p class="mt-5 mb-3 text-muted">© 2019-2020</p>
 
 		<a class="btn btn-sm" th:href="@{/index.html(l='fr_FR')}">Française</a>
 		<a class="btn btn-sm" th:href="@{/index.html(l='en_CA')}">English</a>
 	</form>
+
+	<script>
+		function noFeature() {
+			alert("Sorry! This feature is coming soon!");
+		}
+	</script>
+
 
 	</body>
 
