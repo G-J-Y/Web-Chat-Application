@@ -2,6 +2,7 @@ package com.concordia.message_board.controller;
 
 import com.concordia.message_board.entities.Attachment;
 import com.concordia.message_board.entities.Post;
+import com.concordia.message_board.entities.XMLFile;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Document;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Element;
+import java.io.*;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -282,4 +290,75 @@ public class ModelController {
         return "postMessage";
     }
 
+    //A3 download
+    @RequestMapping(value = "/downloadXML", method = RequestMethod.GET)
+    public void downloadXml(HttpServletResponse  response) throws Exception {
+
+        messageMapper = new MessageMapper();
+        List<Post> posts = messageMapper.getAllPost();
+
+        String filename = "postList.xml";
+        response.setContentType("text/xml");
+        response.setHeader("Content-Disposition", "attachment;filename= " + filename);
+
+        PrintWriter out = response.getWriter();
+        Post currentPost;
+        //write the data out using xml type
+        out.println("<PostList>");
+        for (int i = 0; i < posts.size(); i++) {
+            currentPost = posts.get(i);
+            out.println("<Post>");
+            out.println("\t<name>" + currentPost.getUserId() + "</name>");
+            out.println("\t<date>" + currentPost.getPostDate() + "</date>");
+            out.println("\t<title>" + currentPost.getTitle() + "</title>");
+            out.println("\t<content>" + currentPost.getContent() + "</content>");
+            out.println("\t<attachment>" + currentPost.getAttachment().getFileName() + "</attachment>");
+            out.println("</post>\n");
+        }
+        out.println("</PostList>");
+        out.flush();
+        out.close();
+    }
+
+    @RequestMapping(value = "/transformView", method = RequestMethod.GET)
+    public void xmlToHtml(HttpServletResponse  response) throws Exception {
+
+        messageMapper = new MessageMapper();
+        List<Post> posts = messageMapper.getAllPost();
+        XMLFile xmlFile = new XMLFile();
+
+        //XML to HTML
+        response.setContentType("text/html;charset=UTF 8");
+        //File xml = new File ("postList.xml");
+        File xsl = new File ("postList.xsl");
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.newDocument();
+
+        Element rootElement = doc.createElement("PostList");
+        doc.appendChild(rootElement);
+
+        for (Post post:posts) {
+            String name = post.getUserId();
+            String date = post.getPostDate();
+            String title = post.getTitle();
+            String content = post.getContent();
+            String attachName = post.getAttachment().getFileName();
+            rootElement.appendChild(xmlFile.createPostElement(doc, name, date, title, content, attachName));
+        }
+
+
+        //Document document = builder.parse(xml);
+        DOMSource source = new DOMSource(doc);
+
+        PrintWriter out = response.getWriter();
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+        StreamSource xslt = new StreamSource(xsl);
+        Transformer transformer = tFactory.newTransformer(xslt);
+
+        StreamResult result = new StreamResult(out);
+        transformer.transform(source, result);
+
+    }
 }
