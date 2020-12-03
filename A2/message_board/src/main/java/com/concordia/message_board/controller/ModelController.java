@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -141,10 +142,21 @@ public class ModelController {
     public String allPosts(Model model) throws Exception {
 
         messageMapper = new MessageMapper();
-        List<Post> posts = messageMapper.getAllPost(number);
-        //-----------------------------sort posts by time-------------------------
+        List<Post> posts = messageMapper.getAllPost();
+//-----------------------------sort posts by time-------------------------
         Collections.sort(posts);
-        model.addAttribute("posts", posts);
+
+        List<Post> tenPosts = new ArrayList<>();
+        int length = Integer.valueOf(number);
+
+        if (posts.size()<length){
+            length = posts.size();
+        }
+        for (int i=0; i<length; i++){
+            tenPosts.add(posts.get(i));
+        }
+
+        model.addAttribute("posts", tenPosts);
 
         return "viewMessage";
     }
