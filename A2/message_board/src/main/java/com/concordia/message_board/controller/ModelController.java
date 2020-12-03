@@ -144,6 +144,7 @@ public class ModelController {
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
 //-----------------------------sort posts by time-------------------------
+
         Collections.sort(posts);
 
         List<Post> tenPosts = new ArrayList<>();
@@ -178,6 +179,7 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
+        Collections.sort(posts);
         model.addAttribute("posts", posts);
         return "postMessage";
     }
