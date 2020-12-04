@@ -5,6 +5,7 @@ import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.entities.XMLFile;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
+import com.concordia.message_board.service.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -46,8 +47,19 @@ public class ModelController {
     }
 
     @GetMapping("/ok")
-    public String ok(HttpSession session){
+    public String ok(HttpSession session) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         System.out.println(session.getAttribute("userId"));
+        System.out.println(session.getAttribute("membership"));
+        System.out.println("Admins------------>");
+        System.out.println(UserFactory.getAdminUser().toString());
+        System.out.println("Concor------------>");
+        System.out.println(UserFactory.getConcordiaUser().toString());
+        System.out.println("Encs------------>");
+        System.out.println(UserFactory.getEncsUser().toString());
+        System.out.println("Comp------------>");
+        System.out.println(UserFactory.getCompUser().toString());
+        System.out.println("soen------------>");
+        System.out.println(UserFactory.getSoenUser().toString());
         return "viewMessage";
     }
 

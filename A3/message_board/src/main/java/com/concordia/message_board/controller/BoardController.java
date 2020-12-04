@@ -3,6 +3,8 @@ package com.concordia.message_board.controller;
 import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
+import com.concordia.message_board.service.UserFactory;
+import com.concordia.message_board.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,12 +24,15 @@ public class BoardController {
     @Autowired
     private PostManager postManager;
     private MessageMapper messageMapper;
+    @Autowired
+    private UserManager userManager;
 
     @Value("${display.number}")
     private String number;
 
     @GetMapping("/")
     public String logIn(){
+        userManager.initializeFactory("users.xml");
         return "login";
     }
 
@@ -45,6 +50,8 @@ public class BoardController {
 
         if(postManager.authentication(userId, password)){
             session.setAttribute("userId",userId);
+            session.setAttribute("membership", UserFactory.getMap().get(userId));
+            System.out.println(session.getAttribute("membership"));
             // show post history
 
             messageMapper = new MessageMapper();
