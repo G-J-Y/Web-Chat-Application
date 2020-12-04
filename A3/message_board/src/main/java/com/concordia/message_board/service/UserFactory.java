@@ -25,6 +25,7 @@ public class UserFactory {
             return null;
         }
     }
+
     public static Map<String,String> getMap(){return map;}
     public static AdminUser getAdminUser() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         if(adminUser == null){
@@ -43,6 +44,7 @@ public class UserFactory {
         if(encsUser == null){
             encsUser =(EncsUser) Class.forName("com.concordia.message_board.entities.EncsUser").newInstance();
             encsUser.setEncsNamesList(getConcordiaUser().getConNamesList());
+            encsUser.setConPostsList(getConcordiaUser().getConPostsList());
         }
         return encsUser;
     }
@@ -51,6 +53,10 @@ public class UserFactory {
             compUser =(CompUser) Class.forName("com.concordia.message_board.entities.CompUser").newInstance();
             compUser.setConNamesList(getConcordiaUser().getConNamesList());
             compUser.setEncsNamesList(getEncsUser().getEncsNamesList());
+            //For Post
+            compUser.setEncsPostsList(getEncsUser().getEncsPostsList());
+            compUser.setConPostsList(getConcordiaUser().getConPostsList());
+
         }
         return compUser;
     }
@@ -59,6 +65,9 @@ public class UserFactory {
             soenUser =(SoenUser) Class.forName("com.concordia.message_board.entities.SoenUser").newInstance();
             soenUser.setEncsNamesList(getEncsUser().getEncsNamesList());
             soenUser.setConNamesList(getConcordiaUser().getConNamesList());
+            //for Post
+            soenUser.setEncsPostsList(getEncsUser().getEncsPostsList());
+            soenUser.setConPostsList(getConcordiaUser().getConPostsList());
         }
         return soenUser;
     }

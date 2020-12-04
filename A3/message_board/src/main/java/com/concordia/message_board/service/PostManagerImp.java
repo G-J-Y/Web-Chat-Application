@@ -118,6 +118,68 @@ public class PostManagerImp implements PostManager,UserManager{
         return UserFactory.getSpecificList(status);
     }
 
+    //support method
+    public List<Post> getPostsForGroup(String group) {
+        List<Post> ans = new ArrayList<>();
+        try{
+            if(group.equals("concordia")) ans = UserFactory.getConcordiaUser().getConPostsList();
+            else if(group.equals("encs")) ans = UserFactory.getEncsUser().getEncsPostsList();
+            else if(group.equals("comp")) ans = UserFactory.getCompUser().getCompPostsList();
+            else if(group.equals("soen")) ans = UserFactory.getSoenUser().getSoenPostsList();
+        }
+        catch(Exception e){
+            System.out.println("Sorry,Can't find your class with reflection");
+        }
+        try{UserFactory.getEncsUser().toString();}
+        catch(Exception e){
+
+        }
+
+        return ans;
+    }
+    //support method
+
+    public void clear(){
+        try{
+            UserFactory.getConcordiaUser().getConPostsList().clear();
+            UserFactory.getEncsUser().getEncsNamesList().clear();
+            UserFactory.getCompUser().getCompPostsList().clear();
+            UserFactory.getSoenUser().getSoenPostsList().clear();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //support method
+    public void sortPosts(List<Post> list) {
+            clear();
+        for(Post post:list){
+            String membership = post.getMembership();
+            try{
+                if(membership.equals("concordia")) UserFactory.getConcordiaUser().addPostToList(post);
+                else if(membership.equals("encs")) UserFactory.getEncsUser().addPostToList(post);
+                else if(membership.equals("comp")) UserFactory.getCompUser().addPostToList(post);
+                else if(membership.equals("soen")) UserFactory.getSoenUser().addPostToList(post);
+                else if(membership.equals("public")||membership.equals("")||membership == null){
+                    UserFactory.getSoenUser().addPostToListForSoen(post);
+                    UserFactory.getCompUser().addPostToList(post);
+            }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                System.out.println("Sorry,can't find your class");
+            }
+
+        }
+    }
+
+    @Override
+    public List<Post> getSortedListForGroup(List<Post> list, String group) {
+        sortPosts(list);
+        return getPostsForGroup(group);
+    }
+
     @Override
     public void initializeFactory(String filePath) {
         try {

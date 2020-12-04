@@ -6,6 +6,7 @@ import com.concordia.message_board.entities.XMLFile;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
 import com.concordia.message_board.service.UserFactory;
+import com.concordia.message_board.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,8 @@ public class ModelController {
     @Autowired
     PostManager postManager;
     MessageMapper messageMapper;
+    @Autowired
+    UserManager userManager;
 
     @PostMapping("/creatPost")
     public String createPost(Post post, HttpSession session){
@@ -70,6 +73,7 @@ public class ModelController {
     public String post(@RequestParam(value = "title",required = false) String title,
                        @RequestParam(value = "content") String content,
                        @RequestParam(value = "file",required = false) MultipartFile file,
+                       @RequestParam(value = "membership",required = false) String membership,
                        Model model, HttpSession session) throws Exception {
 
         messageMapper = new MessageMapper();
@@ -93,14 +97,19 @@ public class ModelController {
         }
 
 
-        Post post = new Post(userId,postID,title,content,date, attachment);
+        Post post = new Post(userId,postID,title,content,date, attachment,membership);
         messageMapper.insertIntoDB(post);
 
         //postManager.createPost(post);
         //List<Post> posts = postManager.getAllPost();
 
         //get current user's posts from DB
-        List<Post> posts = messageMapper.getUserPost(userId);
+        List<Post> posts = new ArrayList<>();
+        if(session.getAttribute("membership").equals("admins")){
+            posts = messageMapper.getAllPost();
+        }else{
+            posts = messageMapper.getUserPost(userId);
+        }
         Collections.sort(posts);
         model.addAttribute("posts", posts);
 
@@ -112,6 +121,7 @@ public class ModelController {
                          @RequestParam(value = "title",required = false) String title,
                          @RequestParam("content") String content,
                          @RequestParam(value = "file",required = false) MultipartFile file,
+                         @RequestParam(value = "membership",required = false) String membership,
                          Model model, HttpSession session) throws Exception {
 
         messageMapper = new MessageMapper();
@@ -122,6 +132,8 @@ public class ModelController {
         oldPost.setTitle(title);
         oldPost.setPostDate(date);
         oldPost.setContent(content);
+        //add membership
+        oldPost.setMembership(membership);
 
         Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
 
@@ -159,20 +171,26 @@ public class ModelController {
     }
 
     @GetMapping("/allPosts")
-    public String allPosts(Model model) throws Exception {
+    public String allPosts(Model model,HttpSession session) throws Exception {
 
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
         //-----------------------------sort posts by time-------------------------
+        String membership = (String)session.getAttribute("membership");
+        System.out.println(membership);
+        // just can see the posts within the group
+        if(!membership.equals("admins")){
+            posts = userManager.getSortedListForGroup(posts,membership);
+        }
         Collections.sort(posts);
 
         List<Post> tenPosts = new ArrayList<>();
         int length = Integer.valueOf(number);
 
-        if (posts.size()<length){
+        if (posts.size() < length){
             length = posts.size();
         }
-        for (int i=0; i<length; i++){
+        for (int i = 0; i < length; i++){
             tenPosts.add(posts.get(i));
         }
 

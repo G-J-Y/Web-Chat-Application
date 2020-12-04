@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminUser {
+    //store Admin users list
     private List<String> adminNamesList;
 
     public AdminUser() {

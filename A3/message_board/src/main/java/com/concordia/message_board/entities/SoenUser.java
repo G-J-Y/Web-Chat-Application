@@ -8,9 +8,51 @@ public class SoenUser {
     private List<String> conNamesList;
     private List<String> soenNamesList;
 
+    private List<Post> encsPostsList;
+    private List<Post> conPostsList;
+    private List<Post> soenPostsList;
+
     public SoenUser() {
+        soenPostsList = new ArrayList<>();
         soenNamesList = new ArrayList<>();
     }
+
+//----------------------------setter and getter for soen-------------------------
+
+
+    public List<Post> getEncsPostsList() {
+        return encsPostsList;
+    }
+
+    public void setEncsPostsList(List<Post> encsPostsList) {
+        this.encsPostsList = encsPostsList;
+    }
+
+    public List<Post> getConPostsList() {
+        return conPostsList;
+    }
+
+    public void setConPostsList(List<Post> conPostsList) {
+        this.conPostsList = conPostsList;
+    }
+
+    public List<Post> getSoenPostsList() {
+        return soenPostsList;
+    }
+
+    public void setSoenPostsList(List<Post> soenPostsList) {
+        this.soenPostsList = soenPostsList;
+    }
+
+    //----------------------------add post to list---------------------------------------------
+    public void addPostToList(Post post){
+        encsPostsList.add(post);
+        soenPostsList.add(post);
+        conPostsList.add(post);
+    }
+
+    //-----------------------------------------------------------
+
 
     public List<String> getEncsNamesList() {
         return encsNamesList;
@@ -37,11 +79,19 @@ public class SoenUser {
         conNamesList.add(userId);
         soenNamesList.add(userId);
     }
+    public void addPostToListForSoen(Post post){
+        soenPostsList.add(post);
+    }
     @Override
     public String toString() {
-        String li = "";
+        String li = "The following is the users in soen:";
         for(String str:soenNamesList){
             li += " "+str;
+        }
+        li +="following is data for soen:/n";
+        for(Post post:soenPostsList){
+            li +="/n";
+            li += post;
         }
         return li;
     }
