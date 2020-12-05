@@ -313,7 +313,7 @@ public class ModelController {
             out.println("\t<title>" + currentPost.getTitle() + "</title>");
             out.println("\t<content>" + currentPost.getContent() + "</content>");
             out.println("\t<attachment>" + currentPost.getAttachment().getFileName() + "</attachment>");
-            out.println("</post>\n");
+            out.println("</Post>\n");
         }
         out.println("</PostList>");
         out.flush();
