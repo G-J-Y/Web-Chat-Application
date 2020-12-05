@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostManagerImp implements PostManager {
+public class PostManagerImp implements PostManager,UserManager{
     private ArrayList<Post> searchedPosts = new ArrayList<>();
     private ArrayList<Post> recentPosts = new ArrayList<>();
 
@@ -75,7 +75,7 @@ public class PostManagerImp implements PostManager {
 
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);
-                System.out.println("\nCurrent Element :" + nNode.getNodeName());
+                //System.out.println("\nCurrent Element :" + nNode.getNodeName());
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
@@ -94,7 +94,7 @@ public class PostManagerImp implements PostManager {
 
 
                     if(temUserId.equals(userId)&&encoding(userId,password).equals(temPassword)) {
-                        System.out.println("I found it");
+                        System.out.println("I found "+userId);
                         return true;
                     }
 
@@ -110,9 +110,127 @@ public class PostManagerImp implements PostManager {
     public String encoding(String userId, String password) {
 
         String hashPassword =  new SimpleHash("SHA-256", password, userId+"soen387", 1024).toString();
-
         return hashPassword;
     }
 
+    @Override
+    public List<String> getList(String status) {
+        return UserFactory.getSpecificList(status);
+    }
+
+    //support method
+    public List<Post> getPostsForGroup(String group) {
+        List<Post> ans = new ArrayList<>();
+        try{
+            if(group.equals("concordia")) ans = UserFactory.getConcordiaUser().getConPostsList();
+            else if(group.equals("encs")) ans = UserFactory.getEncsUser().getEncsPostsList();
+            else if(group.equals("comp")) ans = UserFactory.getCompUser().getCompPostsList();
+            else if(group.equals("soen")) ans = UserFactory.getSoenUser().getSoenPostsList();
+        }
+        catch(Exception e){
+            System.out.println("Sorry,Can't find your class with reflection");
+        }
+        try{UserFactory.getEncsUser().toString();}
+        catch(Exception e){
+
+        }
+
+        return ans;
+    }
+    //support method
+
+    public void clear(){
+        try{
+            UserFactory.getConcordiaUser().getConPostsList().clear();
+            UserFactory.getEncsUser().getEncsNamesList().clear();
+            UserFactory.getCompUser().getCompPostsList().clear();
+            UserFactory.getSoenUser().getSoenPostsList().clear();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //support method
+    public void sortPosts(List<Post> list) {
+            clear();
+        for(Post post:list){
+            String membership = post.getMembership();
+            try{
+                if(membership.equals("concordia")) UserFactory.getConcordiaUser().addPostToList(post);
+                else if(membership.equals("encs")) UserFactory.getEncsUser().addPostToList(post);
+                else if(membership.equals("comp")) UserFactory.getCompUser().addPostToList(post);
+                else if(membership.equals("soen")) UserFactory.getSoenUser().addPostToList(post);
+                else if(membership.equals("public")||membership.equals("")||membership == null){
+                    UserFactory.getSoenUser().addPostToListForSoen(post);
+                    UserFactory.getCompUser().addPostToList(post);
+            }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                System.out.println("Sorry,can't find your class");
+            }
+
+        }
+    }
+
+    @Override
+    public List<Post> getSortedListForGroup(List<Post> list, String group) {
+        sortPosts(list);
+        return getPostsForGroup(group);
+    }
+
+    @Override
+    public void initializeFactory(String filePath) {
+        try {
+            File inputFile = new File(filePath);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputFile);
+            doc.getDocumentElement().normalize();
+            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            NodeList nList = doc.getElementsByTagName("user");
+            System.out.println("Check "+filePath+" and initialize our UserFactory...");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+               // System.out.println("\nCurrent Element :" + nNode.getNodeName());
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+
+                    String membership = eElement
+                            .getElementsByTagName("membership")
+                            .item(0)
+                            .getTextContent();
+                    System.out.println("membership--->"+membership);
+
+                    String temUserId = eElement
+                            .getElementsByTagName("userId")
+                            .item(0)
+                            .getTextContent();
+                    //  System.out.println("Name----->"+temUserId);
+
+                    if(membership.equals("admins")){
+                        UserFactory.getAdminUser().add(temUserId);
+                    }else if(membership.equals("concordia")){
+                        UserFactory.getConcordiaUser().addUserIdToList(temUserId);
+                    }else if(membership.equals("encs")){
+                        UserFactory.getEncsUser().addUserIdToList(temUserId);
+                    }else if(membership.equals("comp")){
+                        UserFactory.getCompUser().addUserIdToList(temUserId);
+                    }else if(membership.equals("soen")){
+                        UserFactory.getSoenUser().addUserIdToList(temUserId);
+                        //UserFactory.getSoenUser().toString();
+                    }else{
+                        System.out.println("Please check "+filePath+". Some users may have wrong group!");
+                    }
+                   UserFactory.getMap().put(temUserId,membership);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

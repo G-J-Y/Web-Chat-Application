@@ -64,6 +64,10 @@
                     <label id="attachment">Attachment:</label>
                     <input id="file" class="form-control-file" type="file" name="file" >
                 </div>
+                <div id="div4" class="form-group">
+                    <label>Post for group:</label>
+                    <input class="form-control" id="membership" name="membership"></input>
+                </div>
 
                 <!--<td width="90%" ><input id="attachment" name="attachment" />-->
 
@@ -88,6 +92,10 @@
         <tr>
             <td>Content</td>
             <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
+        </tr>
+        <tr>
+            <td>Membership</td>
+            <td id="membership2" style="width:21%; font-weight:normal;" th:text="${post.getMembership()}"></td>
         </tr>
         <tr>
             <td>Date</td>

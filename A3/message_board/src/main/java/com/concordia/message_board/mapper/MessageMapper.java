@@ -17,7 +17,7 @@ public class MessageMapper {
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
     private String serverName = "root";
-    private String password = "root";
+    private String password = "comp353";
 
     public MessageMapper(){
     }
@@ -44,11 +44,12 @@ public class MessageMapper {
         String title = post.getTitle();
         String postDate = post.getPostDate();
         String content = post.getContent();
+        String membership = post.getMembership();
         boolean updated = post.isEdited();
         Attachment attachment = post.getAttachment();
 
         //String query = "INSERT INTO post(postid, userid, title, postdate, content, attachment) value(?,?,?,?,?,?)";
-        String query = "INSERT INTO post(postid, userid, title, postdate, content, updated) value(?,?,?,?,?,?)";
+        String query = "INSERT INTO post(postid, userid, title, postdate, content, updated,membership) value(?,?,?,?,?,?,?)";
         PreparedStatement statement = conn.prepareStatement(query);
 
         statement.setString(1,postId);
@@ -57,6 +58,8 @@ public class MessageMapper {
         statement.setString(4,postDate);
         statement.setString(5,content);
         statement.setBoolean(6,updated);
+        statement.setString(7,membership);
+
 
         statement.execute();
         statement.close();
@@ -73,15 +76,15 @@ public class MessageMapper {
 
         conn = getCon();
 
-        String query = "UPDATE post SET title=?, postDate=?, content=?, updated = ? WHERE postId=?";
+        String query = "UPDATE post SET title=?, postDate=?, content=?, updated = ?,membership = ? WHERE postId=?";
         PreparedStatement ps = conn.prepareStatement(query);
 
         ps.setString(1, post.getTitle());
         ps.setString(2, post.getPostDate());
         ps.setString(3, post.getContent());
         ps.setBoolean(4, post.isEdited());
-        ps.setString(5, post.getPostId());
-
+        ps.setString(5, post.getMembership());
+        ps.setString(6, post.getPostId());
 
         int i = ps.executeUpdate();
 
@@ -153,6 +156,7 @@ public class MessageMapper {
         post.setTitle( rs.getString("title") );
         post.setPostDate( rs.getString("postDate") );
         post.setContent( rs.getString("content") );
+        post.setMembership( rs.getString("membership") );
         post.setEdited(rs.getBoolean("updated"));
 
         Attachment attachment = extractAttachFromResultSet(post.getPostId());
@@ -178,6 +182,7 @@ public class MessageMapper {
             post.setPostDate(rs.getString("postDate"));
             post.setContent(rs.getString("content"));
             post.setEdited(rs.getBoolean("updated"));
+            post.setMembership( rs.getString("membership") );
         }
         Attachment attachment = extractAttachFromResultSet(post.getPostId());
         post.setAttachment(attachment);

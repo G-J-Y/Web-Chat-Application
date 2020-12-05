@@ -143,7 +143,8 @@ public class ModelController {
 
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
-        //-----------------------------sort posts by time-------------------------
+//-----------------------------sort posts by time-------------------------
+
         Collections.sort(posts);
 
         List<Post> tenPosts = new ArrayList<>();

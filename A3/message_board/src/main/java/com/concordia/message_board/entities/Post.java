@@ -13,11 +13,13 @@ public class Post implements Comparable{
     //private Blob attachBlob;
     private boolean edited;
     private Attachment attachment;
+    //add membership
+    private String membership;
 
     public Post() {
     }
 
-    public Post(String userId,String postId, String title, String content, String postDate, Attachment attachment){
+    public Post(String userId,String postId, String title, String content, String postDate, Attachment attachment,String membership){
         this.userId = userId;
         this.title = title;
         this.postId = postId;
@@ -26,6 +28,7 @@ public class Post implements Comparable{
         //this.attachBlob = attachBlob;
         this.attachment = attachment;
         this.edited = false;
+        this.membership = membership;
     }
 
     public Post(Post copyPost){
@@ -34,7 +37,16 @@ public class Post implements Comparable{
         this.title = copyPost.title;
         this.content = copyPost.content;
         this.postDate = copyPost.postDate;
+        this.membership = copyPost.membership;
         //this.attachBlob = copyPost.attachBlob;
+    }
+
+    public String getMembership() {
+        return membership;
+    }
+
+    public void setMembership(String membership) {
+        this.membership = membership;
     }
 
     public boolean isEdited() {
@@ -108,6 +120,7 @@ public class Post implements Comparable{
                 "userId='" + userId + '\'' +
                 ", postId='" + postId + '\'' +
                 ", content='" + content + '\'' +
+                ", membership='" + membership + '\'' +
                 ", date='" + postDate + '\'' +
                 ", attachment=" + attachment.getFileName() +'\'' +
                 '}';
