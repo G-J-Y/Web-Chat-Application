@@ -142,7 +142,7 @@ public class PostManagerImp implements PostManager,UserManager{
     public void clear(){
         try{
             UserFactory.getConcordiaUser().getConPostsList().clear();
-            UserFactory.getEncsUser().getEncsNamesList().clear();
+            UserFactory.getEncsUser().getEncsPostsList().clear();
             UserFactory.getCompUser().getCompPostsList().clear();
             UserFactory.getSoenUser().getSoenPostsList().clear();
         }catch(Exception e){
