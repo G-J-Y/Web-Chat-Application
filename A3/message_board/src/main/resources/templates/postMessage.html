@@ -10,8 +10,10 @@
 <body>
 <img name="logo" class="mb-4" src="/asserts/img/newlogo.png" alt="">
 
+
 <div id="logout">
     <form action="" th:action="@{/logout}" method="GET" >
+        <P th:text="${userId}" style="color: #bf2718"></P>
         <button class="btn btn-primary" type="submit" name="logout">Log out</button>
     </form>
 </div>
