@@ -990,7 +990,12 @@ attachPostId</ColNames>
       <DataType>tinyint(1)|0s</DataType>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <key id="302" parent="286" name="PRIMARY">
+    <column id="302" parent="286" name="membership">
+      <Position>7</Position>
+      <Comment>public</Comment>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <key id="303" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>postId</ColNames>
       <Primary>1</Primary>

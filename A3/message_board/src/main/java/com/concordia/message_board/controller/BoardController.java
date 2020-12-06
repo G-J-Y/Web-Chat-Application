@@ -33,6 +33,7 @@ public class BoardController {
     @GetMapping("/")
     public String logIn(){
         userManager.initializeFactory("users.xml");
+        //userManager.initializeFactory("userGroup.xml");
         return "login";
     }
 
