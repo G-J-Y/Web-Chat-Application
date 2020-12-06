@@ -32,8 +32,8 @@ public class BoardController {
 
     @GetMapping("/")
     public String logIn(){
-        userManager.initializeFactory("users.xml");
-        //userManager.initializeFactory("userGroup.xml");
+        //userManager.initializeFactory("users.xml");
+        userManager.initializeFactory("userGroup.xml");
         return "login";
     }
 
@@ -57,9 +57,16 @@ public class BoardController {
 
             messageMapper = new MessageMapper();
             List<Post> posts = messageMapper.getUserPost(userId);
+
+            String membership = (String)session.getAttribute("membership");
+
+            if(membership.equals("admins")){
+                posts = messageMapper.getAllPost();
+            }
             Collections.sort(posts);
             model.addAttribute("posts", posts);
-            return "redirect:/postMessage.html";
+            model.addAttribute("userId", userId);
+            return "postMessage";
         }
         return "error";
     }

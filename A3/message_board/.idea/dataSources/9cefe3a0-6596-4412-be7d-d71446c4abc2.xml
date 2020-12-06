@@ -994,6 +994,7 @@ attachPostId</ColNames>
       <Position>7</Position>
       <Comment>public</Comment>
       <DataType>varchar(255)|0s</DataType>
+      <DefaultExpression>&apos;public&apos;</DefaultExpression>
     </column>
     <key id="303" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>

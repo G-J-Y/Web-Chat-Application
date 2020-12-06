@@ -34,6 +34,7 @@ public class ConcordiaUser {
     }
     public void addPostToList(Post post){
         conPostsList.add(post);
+        System.out.println(conPostsList.size()+" :<<<<*************************con List size");
     }
     @Override
     public String toString() {
