@@ -14,7 +14,11 @@ public class SoenUser {
 
     public SoenUser() {
         soenPostsList = new ArrayList<>();
+        conPostsList = new ArrayList<>();
+        encsPostsList = new ArrayList<>();
+        encsNamesList = new ArrayList<>();
         soenNamesList = new ArrayList<>();
+        conNamesList = new ArrayList<>();
     }
 
 //----------------------------setter and getter for soen-------------------------
@@ -84,14 +88,13 @@ public class SoenUser {
     }
     @Override
     public String toString() {
-        String li = "The following is the users in soen:";
+        String li = "The following are Soen users:\n";
         for(String str:soenNamesList){
-            li += " "+str;
+            li += "\n"+str;
         }
-        li +="following is data for soen:/n";
+        li += "\nThe following are Soen posts:\n";
         for(Post post:soenPostsList){
-            li +="/n";
-            li += post;
+            li +="\n"+post;
         }
         return li;
     }

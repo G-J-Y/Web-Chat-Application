@@ -14,7 +14,12 @@ public class CompUser {
 
     public CompUser() {
         compNamesList = new ArrayList<>();
+        conNamesList = new ArrayList<>();
+        encsNamesList = new ArrayList<>();
         compPostsList = new ArrayList<>();
+        conPostsList = new ArrayList<>();
+        encsPostsList = new ArrayList<>();
+
     }
     //-------------------setter and getter for post---------------
 
@@ -83,14 +88,13 @@ public class CompUser {
     }
     @Override
     public String toString() {
-        String li = "The following is the users in comp:";
-        for(String str:compNamesList){
-            li += " "+str;
+        String li = "The following are Comp users:\n";
+        for(String str:encsNamesList){
+            li += "\n"+str;
         }
-        li +="following is data for comp:/n";
-        for(Post post:compPostsList){
-            li +="/n";
-            li += post;
+        li += "\nThe following are Comp posts:\n";
+        for(Post post:encsPostsList){
+            li +="\n"+post;
         }
         return li;
     }
