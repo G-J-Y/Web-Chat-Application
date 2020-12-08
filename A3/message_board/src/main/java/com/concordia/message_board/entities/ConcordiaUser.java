@@ -34,18 +34,17 @@ public class ConcordiaUser {
     }
     public void addPostToList(Post post){
         conPostsList.add(post);
-        System.out.println(conPostsList.size()+" :<<<<*************************con List size");
+        System.out.println(conPostsList.size()+" :<<<<*************************con list size");
     }
     @Override
     public String toString() {
-        String li = "";
+        String li = "The following are Concordia users:\n";
         for(String str:conNamesList){
-            li += " "+str;
+            li += "\n"+str;
         }
-        li +="following is data for concordia:/n";
+        li += "\nThe following are Concordia posts:\n";
         for(Post post:conPostsList){
-            li +="/n";
-            li += post;
+            li +="\n"+post;
         }
         return li;
     }

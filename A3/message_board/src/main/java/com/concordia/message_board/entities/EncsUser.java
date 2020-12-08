@@ -7,11 +7,14 @@ public class EncsUser {
     private List<String> encsNamesList;
     protected List<String> conNamesList;
     private List<Post> encsPostsList;
-    private List<Post> conPostsList;
+    protected List<Post> conPostsList;
 
     public EncsUser(){
         encsNamesList = new ArrayList<>();
+        conNamesList = new ArrayList<>();
         encsPostsList = new ArrayList<>();
+        conPostsList = new ArrayList<>();
+
     }
 
     public List<String> getEncsNamesList() {
@@ -50,14 +53,13 @@ public class EncsUser {
 
     @Override
     public String toString() {
-        String li = "The following is the users in encs:";
+        String li = "The following are Encs users:\n";
         for(String str:encsNamesList){
-            li += " "+str;
+            li += "\n"+str;
         }
-        li +="following is data for encs:/n";
+        li += "\nThe following are Concordia posts:\n";
         for(Post post:encsPostsList){
-            li +="/n";
-            li += post;
+            li +="\n"+post;
         }
         return li;
     }
