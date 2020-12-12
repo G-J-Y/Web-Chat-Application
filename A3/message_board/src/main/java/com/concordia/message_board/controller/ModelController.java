@@ -44,8 +44,9 @@ public class ModelController {
     UserManager userManager;
 
     @PostMapping("/creatPost")
-    public String createPost(Post post, HttpSession session){
+    public String createPost(Post post, HttpSession session,Model model){
         System.out.println(session.getAttribute("userId"));
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
         return "postMessage";
     }
 
@@ -112,6 +113,7 @@ public class ModelController {
         }
         Collections.sort(posts);
         model.addAttribute("posts", posts);
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
 
         return "postMessage";
     }
@@ -160,6 +162,7 @@ public class ModelController {
         //--------------------sort posts---------------
         Collections.sort(posts);
         model.addAttribute("posts", posts);
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
 
         return "postMessage";
     }
@@ -195,6 +198,7 @@ public class ModelController {
         }
 
         model.addAttribute("posts", tenPosts);
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
 
         return "viewMessage";
     }
@@ -207,6 +211,7 @@ public class ModelController {
         List<Post> posts = messageMapper.getUserPost(userId);
         Collections.sort(posts);
         model.addAttribute("posts", posts);
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
         return "postMessage";
     }
 
@@ -216,8 +221,12 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
+        if(session.getAttribute("membership").equals("admins")){
+            posts = messageMapper.getAllPost();
+        }
         Collections.sort(posts);
         model.addAttribute("posts", posts);
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
         return "postMessage";
     }
 
@@ -316,7 +325,7 @@ public class ModelController {
         List<Post> posts = messageMapper.getUserPost(userId);
         Collections.sort(posts);
         model.addAttribute("posts", posts);
-
+        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
         return "postMessage";
     }
 
@@ -343,7 +352,7 @@ public class ModelController {
             out.println("\t<title>" + currentPost.getTitle() + "</title>");
             out.println("\t<content>" + currentPost.getContent() + "</content>");
             out.println("\t<attachment>" + currentPost.getAttachment().getFileName() + "</attachment>");
-            out.println("</post>\n");
+            out.println("</Post>\n");
         }
         out.println("</PostList>");
         out.flush();

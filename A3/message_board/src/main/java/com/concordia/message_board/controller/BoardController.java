@@ -31,15 +31,17 @@ public class BoardController {
     private String number;
 
     @GetMapping("/")
-    public String logIn(){
-        userManager.initializeFactory("users.xml");
+    public String logIn() {
+        // old
+        //userManager.initializeFactory("users.xml");
+        userManager.initializeFactory("userGroup.xml");
         return "login";
     }
 
     //-----------------------set logout controller---------------------------
     @GetMapping("/logout")
-    public String logOut(HttpSession session){
-        session.setAttribute("userId",null);
+    public String logOut(HttpSession session) {
+        session.setAttribute("userId", null);
         return "logout";
     }
 
@@ -48,8 +50,8 @@ public class BoardController {
                                  @RequestParam("password") String password,
                                  Model model, HttpSession session) throws Exception {
 
-        if(postManager.authentication(userId, password)){
-            session.setAttribute("userId",userId);
+        if (postManager.authentication(userId, password)) {
+            session.setAttribute("userId", userId);
             session.setAttribute("membership", UserFactory.getMap().get(userId));
             System.out.println(session.getAttribute("membership"));
             // show post history
@@ -58,28 +60,11 @@ public class BoardController {
             List<Post> posts = messageMapper.getUserPost(userId);
             Collections.sort(posts);
             model.addAttribute("posts", posts);
-            return "redirect:/postMessage.html";
+            model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
+            return "postMessage";
+           // return "redirect:/postMessage.html";
         }
         return "error";
     }
 
-
-    /*@RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String upload(@RequestParam("file") MultipartFile file, Model model){
-        if (file.isEmpty()){
-            model.addAttribute("uploadMessage", "The file is empty!");
-            return "postMessage";
-        }
-        try{
-            byte[] bytes = file.getBytes();
-            //Path path = Paths.get("E:\\fileUpload/" + file.getOriginalFilename());
-            Path path = Paths.get("C:\\Users\\Administrator\\Desktop\\SOEN387\\A2\\fileUpload/" + file.getOriginalFilename());
-            Files.write(path, bytes);
-            model.addAttribute("uploadMessage", "success");
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return "postMessage";
-    }*/
 }
