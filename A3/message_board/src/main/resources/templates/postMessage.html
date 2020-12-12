@@ -10,9 +10,11 @@
 <body>
 <img name="logo" class="mb-4" src="/asserts/img/newlogo.png" alt="">
 
+
 <h4 id="greeting" >[[${greeting}]]</h4>
 <div id="logout">
     <form action="" th:action="@{/logout}" method="GET" >
+        <!--<P th:text="${userId}" style="color: #bf2718"></P>-->
         <button class="btn btn-primary" type="submit" name="logout">Log out</button>
     </form>
 </div>
@@ -67,7 +69,12 @@
                 </div>
                 <div id="div4" class="form-group">
                     <label>Post for group:</label>
-                    <input class="form-control" id="membership" name="membership"></input>
+                    <select name="membership" class="custom-select">
+                        <option selected="" value="public">Public</option>
+                        <option value="encs">Encs</option>
+                        <option value="comp">Comp</option>
+                        <option value="soen">Soen</option>
+                    </select>
                 </div>
 
                 <!--<td width="90%" ><input id="attachment" name="attachment" />-->

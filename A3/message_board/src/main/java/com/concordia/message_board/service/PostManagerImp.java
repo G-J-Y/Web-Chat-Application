@@ -64,7 +64,7 @@ public class PostManagerImp implements PostManager,UserManager{
     @Override
     public boolean authentication(String userId, String password) {
         try {
-            File inputFile = new File("users.xml");
+            File inputFile = new File("userGourp.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);

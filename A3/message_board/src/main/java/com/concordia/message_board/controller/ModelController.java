@@ -221,7 +221,8 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
-        if(session.getAttribute("membership").equals("admins")){
+        String membership = (String)session.getAttribute("membership");
+        if(membership.equals("admins")){
             posts = messageMapper.getAllPost();
         }
         Collections.sort(posts);
