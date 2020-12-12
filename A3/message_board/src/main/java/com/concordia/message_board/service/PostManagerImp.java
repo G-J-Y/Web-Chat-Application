@@ -64,7 +64,7 @@ public class PostManagerImp implements PostManager,UserManager{
     @Override
     public boolean authentication(String userId, String password) {
         try {
-            File inputFile = new File("userGourp.xml");
+            File inputFile = new File("userGroup.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -160,7 +160,7 @@ public class PostManagerImp implements PostManager,UserManager{
                 else if(membership.equals("encs")) UserFactory.getEncsUser().addPostToList(post);
                 else if(membership.equals("comp")) UserFactory.getCompUser().addPostToList(post);
                 else if(membership.equals("soen")) UserFactory.getSoenUser().addPostToList(post);
-                else if(membership.equals("public")||membership.equals("")||membership == null){
+                else if(membership.equals("public")||membership.equals("")){//remove null
                     UserFactory.getSoenUser().addPostToListForSoen(post);
                     UserFactory.getCompUser().addPostToList(post);
             }
@@ -168,6 +168,7 @@ public class PostManagerImp implements PostManager,UserManager{
             }
             catch(Exception e){
                 e.printStackTrace();
+                System.out.println("Title-->"+post.getTitle()+post.getUserId());
                 System.out.println("Sorry,can't find your class");
             }
 
@@ -203,13 +204,11 @@ public class PostManagerImp implements PostManager,UserManager{
                             .getElementsByTagName("membership")
                             .item(0)
                             .getTextContent();
-                    System.out.println("membership--->"+membership);
 
                     String temUserId = eElement
                             .getElementsByTagName("userId")
                             .item(0)
                             .getTextContent();
-                    //  System.out.println("Name----->"+temUserId);
 
                     if(membership.equals("admins")){
                         UserFactory.getAdminUser().add(temUserId);
@@ -221,10 +220,10 @@ public class PostManagerImp implements PostManager,UserManager{
                         UserFactory.getCompUser().addUserIdToList(temUserId);
                     }else if(membership.equals("soen")){
                         UserFactory.getSoenUser().addUserIdToList(temUserId);
-                        //UserFactory.getSoenUser().toString();
                     }else{
                         System.out.println("Please check "+filePath+". Some users may have wrong group!");
                     }
+                    if(temUserId != null)
                    UserFactory.getMap().put(temUserId,membership);
                 }
             }

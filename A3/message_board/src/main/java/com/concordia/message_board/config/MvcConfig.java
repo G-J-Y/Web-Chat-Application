@@ -19,12 +19,15 @@ public class MvcConfig implements WebMvcConfigurer {
    @Override
     public void addInterceptors(InterceptorRegistry registry) {
       registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").
-           excludePathPatterns("/","/index.html","/authentication", "/webjars/**");
+           excludePathPatterns("/","/index.html","/authentication", "/webjars/**", "/**/*.css",
+                   "/**/*.js", "/**/*.png", "/**/*.jpg","/**/*.jpeg", "/**/*.gif", "/**/fonts/*",
+                   "/**/*.svg");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+
     }
 
 

@@ -29,25 +29,17 @@
 <div id="content" style="text-align: center">
     <table class="table table-hover table-bordered" id="table1" th:each="post : ${posts}">
         <tr>
-            <td>User</td>
-            <td id="user" th:text="${post.getUserId()}"></td>
-        </tr>
-        <tr>
             <td>Title</td>
             <td id="title" th:text="${post.getTitle()}"></td>
         </tr>
-        <!--<tr id="userId" >
-            <td>UserId</td>
-            <td id="title" th:text="${post.getUserId()}"></td>
-        </tr><tr id="userId" >
-            <td>PostId</td>
-            <td id="title" th:text="${post.getPostId()}"></td>
-        </tr>-->
-        <tr>
             <td>Content</td>
             <td id="text" th:text="${post.getContent()}"></td>
         </tr>
         <tr>
+        <tr >
+            <td>UserId</td>
+            <td id="userId" th:text="${post.getUserId()}"></td>
+        </tr>
             <td>Membership</td>
             <td id="membership" th:text="${post.getMembership()}"></td>
         </tr>
@@ -57,8 +49,6 @@
         </tr>
         <tr>
             <td>Attachment</td>
-            <!--<td id="attachment" th:text="${post.getAttachment().getFileName()}"></td>-->
-            <!--<td><a th:href="@{'/file?name=' + ${post.getAttachment().getFileName()}}" th:text="${post.getAttachment().getFileName()}"></a></td>-->
             <td><a th:href="@{/file/{postId} (postId = ${post.getPostId()})}" th:text="${post.getAttachment().getFileName()}"></a></td>
         </tr>
         <tr>
@@ -71,7 +61,6 @@
 </div>
 
 <div>
-    <!--<a href="postMessage.html"><button class="bt"> Back </button></a>-->
         <form class="f" action="" th:action="@{/search}" method="GET">
             <fieldset>
                 <div id="div1" class="col-sm-3">

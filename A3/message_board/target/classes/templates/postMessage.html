@@ -21,38 +21,7 @@
 
 <div id="Layer1">
         <form action="" th:action="@{/post}" method="post" enctype="multipart/form-data">
-<!--            <table align="center">-->
-<!--                <tr>-->
-<!--                    <td style=" font-weight:bold; width:10%" >Title：</td>-->
-<!--                    <td width="90%" ><input id="title1" name="title" /></td>-->
-<!--                </tr>-->
 
-<!--                <tr>-->
-<!--                    <td style="font-weight:bold; width:10%" > Content：</td>-->
-<!--                    <td >  <textarea id="textarea" cols="60" rows="10"  name="content"></textarea> </td>-->
-<!--                </tr>-->
-
-<!--                <tr>-->
-<!--                    <center>-->
-<!--                        <td style="font-weight:bold; width:10%" >Attachment：</td>-->
-<!--                        &lt;!&ndash;<td width="90%" ><input id="attachment" name="attachment" /></td>&ndash;&gt;-->
-<!--                        <td>-->
-<!--                            <input type="file" name="file">-->
-<!--                            &lt;!&ndash;<div th:if="${uploadMessage}">-->
-<!--                                <p th:text="${uploadMessage}"/>-->
-<!--                            </div>&ndash;&gt;-->
-<!--                        </td>-->
-<!--                    </center>-->
-<!--                </tr>-->
-
-<!--                <tr >-->
-<!--                    <td colspan="2">-->
-<!--                        <center>-->
-<!--                            <input type="submit" name="post" value="Post" />-->
-<!--                        </center>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </table>-->
             <fieldset>
                 <div id="div1" class="form-group">
                     <label>Title:</label>
@@ -71,17 +40,13 @@
                     <label>Post for group:</label>
                     <select name="membership" class="custom-select">
                         <option selected="" value="public">Public</option>
+                        <option value="concordia">Concordia</option>
                         <option value="encs">Encs</option>
                         <option value="comp">Comp</option>
                         <option value="soen">Soen</option>
                     </select>
                 </div>
 
-                <!--<td width="90%" ><input id="attachment" name="attachment" />-->
-
-                <!--<div th:if="${uploadMessage}">
-                   <p th:text="${uploadMessage}"/>
-                </div>-->
             </fieldset>
             <button class="btn btn-primary" type="submit" name="post">Post</button>
         </form>
@@ -100,6 +65,10 @@
         <tr>
             <td>Content</td>
             <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getContent()}"></td>
+        </tr>
+        <tr>
+            <td>UserId</td>
+            <td id="text" style="width:21%; font-weight:normal;" th:text="${post.getUserId()}"></td>
         </tr>
         <tr>
             <td>Membership</td>

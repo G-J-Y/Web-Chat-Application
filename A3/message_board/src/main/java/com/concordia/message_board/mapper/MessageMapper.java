@@ -2,7 +2,6 @@ package com.concordia.message_board.mapper;
 
 import com.concordia.message_board.entities.Attachment;
 import com.concordia.message_board.entities.Post;
-
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,7 +16,7 @@ public class MessageMapper {
     private String jdbcName ="com.mysql.cj.jdbc.Driver";
     private Connection conn;
     private String serverName = "root";
-    private String password = "root";
+    private String password = "comp353";
 
     public MessageMapper(){
     }

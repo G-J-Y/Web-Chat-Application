@@ -51,7 +51,7 @@ public class BoardController {
         if (postManager.authentication(userId, password)) {
             session.setAttribute("userId", userId);
             session.setAttribute("membership", UserFactory.getMap().get(userId));
-            System.out.println(session.getAttribute("membership"));
+            System.out.println(session.getAttribute("membership")+"&&&&&&&&&&&&&&");
             // show post history
 
             messageMapper = new MessageMapper();

@@ -10,7 +10,9 @@ com\concordia\message_board\entities\User.class
 com\concordia\message_board\entities\CompUser.class
 com\concordia\message_board\controller\BoardController.class
 com\concordia\message_board\entities\ConcordiaUser.class
+com\concordia\message_board\config\MvcConfig.class
 com\concordia\message_board\entities\Post.class
+com\concordia\message_board\component\LoginHandlerInterceptor.class
 com\concordia\message_board\mapper\MessageMapper.class
 com\concordia\message_board\MessageBoardApplication.class
 com\concordia\message_board\service\UserFactory.class

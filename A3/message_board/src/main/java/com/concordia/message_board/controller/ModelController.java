@@ -5,7 +5,6 @@ import com.concordia.message_board.entities.Post;
 import com.concordia.message_board.entities.XMLFile;
 import com.concordia.message_board.mapper.MessageMapper;
 import com.concordia.message_board.service.PostManager;
-import com.concordia.message_board.service.UserFactory;
 import com.concordia.message_board.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
@@ -43,29 +41,6 @@ public class ModelController {
     @Autowired
     UserManager userManager;
 
-    @PostMapping("/creatPost")
-    public String createPost(Post post, HttpSession session,Model model){
-        System.out.println(session.getAttribute("userId"));
-        model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
-        return "postMessage";
-    }
-
-    @GetMapping("/ok")
-    public String ok(HttpSession session) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        System.out.println(session.getAttribute("userId"));
-        System.out.println(session.getAttribute("membership"));
-        System.out.println("Admins------------>");
-        System.out.println(UserFactory.getAdminUser().toString());
-        System.out.println("Concor------------>");
-        System.out.println(UserFactory.getConcordiaUser().toString());
-        System.out.println("Encs------------>");
-        System.out.println(UserFactory.getEncsUser().toString());
-        System.out.println("Comp------------>");
-        System.out.println(UserFactory.getCompUser().toString());
-        System.out.println("soen------------>");
-        System.out.println(UserFactory.getSoenUser().toString());
-        return "viewMessage";
-    }
 
     @Value("${display.number}")
     private String number;
@@ -82,7 +57,7 @@ public class ModelController {
         String postID = UUID.randomUUID().toString().substring(0,12);
         String userId = (String)session.getAttribute("userId");
 
-        Blob blob = null;
+        Blob blob;
         String fileName = file.getOriginalFilename();
         String fileType = file.getContentType();
         Long fileSize = file.getSize();
@@ -97,15 +72,10 @@ public class ModelController {
             attachment = new Attachment(attachId,postID,fileName,fileType,fileSize,blob);
         }
 
-
         Post post = new Post(userId,postID,title,content,date, attachment,membership);
         messageMapper.insertIntoDB(post);
 
-        //postManager.createPost(post);
-        //List<Post> posts = postManager.getAllPost();
-
-        //get current user's posts from DB
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts;
         if(session.getAttribute("membership").equals("admins")){
             posts = messageMapper.getAllPost();
         }else{
@@ -137,10 +107,7 @@ public class ModelController {
         //add membership
         oldPost.setMembership(membership);
 
-        Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
-
         if (!file.isEmpty()) {
-            //Boolean delete = messageMapper.deleteAttach(oldPost.getPostId());
             String fileName = file.getOriginalFilename();
             String fileType = file.getContentType();
             Long fileSize = file.getSize();
@@ -149,21 +116,18 @@ public class ModelController {
 
             String attachId = UUID.randomUUID().toString().substring(0,12);
             Attachment attachment = new Attachment(attachId, oldPost.getPostId(), fileName, fileType, fileSize, blob);
-            // show edited if attachment is updated
-            //----------------------------------------------------------------
-            //attachment.setEdited(true);
+
             oldPost.setAttachment(attachment);
         }
         // show edited if post is updated
         //----------------------------------------------------------------
         oldPost.setEdited(true);
         messageMapper.updatePost(oldPost);
-        List<Post> posts = messageMapper.getUserPost(userId);
+        List posts = messageMapper.getUserPost(userId);
         //--------------------sort posts---------------
         Collections.sort(posts);
         model.addAttribute("posts", posts);
         model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
-
         return "postMessage";
     }
 
@@ -180,8 +144,6 @@ public class ModelController {
         List<Post> posts = messageMapper.getAllPost();
         //-----------------------------sort posts by time-------------------------
         String membership = (String)session.getAttribute("membership");
-        System.out.println(membership);
-        // just can see the posts within the group
         if(!membership.equals("admins")){
             posts = userManager.getSortedListForGroup(posts,membership);
         }
@@ -209,6 +171,11 @@ public class ModelController {
         messageMapper = new MessageMapper();
         String userId = (String)session.getAttribute("userId");
         List<Post> posts = messageMapper.getUserPost(userId);
+        //-----------------------------sort posts by time-------------------------
+        String membership = (String)session.getAttribute("membership");
+        if(membership.equals("admins")){
+            posts = messageMapper.getAllPost();
+        }
         Collections.sort(posts);
         model.addAttribute("posts", posts);
         model.addAttribute("greeting", "Welcome,"+session.getAttribute("userId"));
@@ -266,7 +233,7 @@ public class ModelController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String edit(@RequestParam(value = "postId",required = false) String postId,
                        @RequestParam(value = "file",required = false) Attachment file,
-                       Model model, HttpSession session) throws Exception {
+                       Model model) throws Exception {
 
         messageMapper = new MessageMapper();
         Post oldPost = messageMapper.extractSpecificPost(postId);
@@ -289,8 +256,6 @@ public class ModelController {
         // set the download type
         response.setHeader("Content-Disposition", "attachment;filename= " + filename);
 
-        // get a output stream from response
-
         OutputStream out = response.getOutputStream();
         byte[] buffer= new byte[4096];
         int bytesRead;
@@ -300,8 +265,6 @@ public class ModelController {
         }
 
         in.close();
-        //out.write(bytes);
-        //out.flush();
         out.close();
 
     }
@@ -332,10 +295,21 @@ public class ModelController {
 
     //A3 download
     @RequestMapping(value = "/downloadXML", method = RequestMethod.GET)
-    public void downloadXml(HttpServletResponse  response) throws Exception {
+    public void downloadXml(HttpServletResponse  response,HttpSession session) throws Exception {
 
         messageMapper = new MessageMapper();
-        List<Post> posts = messageMapper.getAllPost();
+       List<Post> posts = messageMapper.getAllPost();
+       Collections.sort(posts);
+        posts = userManager.getSortedListForGroup(posts,(String)session.getAttribute("membership"));
+        List<Post> tenPosts = new ArrayList<>();
+        int length = Integer.valueOf(number);
+
+        if (posts.size() < length){
+            length = posts.size();
+        }
+        for (int i = 0; i < length; i++){
+            tenPosts.add(posts.get(i));
+        }
 
         String filename = "postList.xml";
         response.setContentType("text/xml");
@@ -345,8 +319,8 @@ public class ModelController {
         Post currentPost;
         //write the data out using xml type
         out.println("<PostList>");
-        for (int i = 0; i < posts.size(); i++) {
-            currentPost = posts.get(i);
+        for (int i = 0; i < tenPosts.size(); i++) {
+            currentPost = tenPosts.get(i);
             out.println("<Post>");
             out.println("\t<name>" + currentPost.getUserId() + "</name>");
             out.println("\t<date>" + currentPost.getPostDate() + "</date>");
@@ -361,10 +335,22 @@ public class ModelController {
     }
 
     @RequestMapping(value = "/transformView", method = RequestMethod.GET)
-    public void xmlToHtml(HttpServletResponse  response) throws Exception {
+    public void xmlToHtml(HttpServletResponse  response,HttpSession session) throws Exception {
 
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
+        Collections.sort(posts);
+        posts = userManager.getSortedListForGroup(posts,(String)session.getAttribute("membership"));
+        List<Post> tenPosts = new ArrayList<>();
+        int length = Integer.valueOf(number);
+
+        if (posts.size() < length){
+            length = posts.size();
+        }
+        for (int i = 0; i < length; i++){
+            tenPosts.add(posts.get(i));
+        }
+
         XMLFile xmlFile = new XMLFile();
 
         //XML to HTML
@@ -379,7 +365,7 @@ public class ModelController {
         Element rootElement = doc.createElement("PostList");
         doc.appendChild(rootElement);
 
-        for (Post post:posts) {
+        for (Post post:tenPosts) {
             String name = post.getUserId();
             String date = post.getPostDate();
             String title = post.getTitle();
@@ -387,8 +373,6 @@ public class ModelController {
             String attachName = post.getAttachment().getFileName();
             rootElement.appendChild(xmlFile.createPostElement(doc, name, date, title, content, attachName));
         }
-
-
         //Document document = builder.parse(xml);
         DOMSource source = new DOMSource(doc);
 
