@@ -300,6 +300,7 @@ public class ModelController {
         messageMapper = new MessageMapper();
        List<Post> posts = messageMapper.getAllPost();
        Collections.sort(posts);
+        if(!session.getAttribute("membership").equals("admins"))
         posts = userManager.getSortedListForGroup(posts,(String)session.getAttribute("membership"));
         List<Post> tenPosts = new ArrayList<>();
         int length = Integer.valueOf(number);
@@ -340,6 +341,7 @@ public class ModelController {
         messageMapper = new MessageMapper();
         List<Post> posts = messageMapper.getAllPost();
         Collections.sort(posts);
+        if(!session.getAttribute("membership").equals("admins"))
         posts = userManager.getSortedListForGroup(posts,(String)session.getAttribute("membership"));
         List<Post> tenPosts = new ArrayList<>();
         int length = Integer.valueOf(number);

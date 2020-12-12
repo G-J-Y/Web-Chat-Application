@@ -99,7 +99,7 @@ public class MessageMapper {
 
         return false;
     }
-
+/*
     public List<Post> getAllPost(String number) throws Exception {
         conn = getCon();
         List<Post> allPost = new ArrayList<>();
@@ -114,7 +114,7 @@ public class MessageMapper {
         }
         conn.close();
         return allPost;
-    }
+    }*/
 
     public List<Post> getAllPost() throws Exception {
         conn = getCon();
@@ -236,30 +236,6 @@ public class MessageMapper {
         conn.close();
 
     }
-
-    /*public boolean updateAttach(Attachment attachment) throws Exception {
-
-        conn = getCon();
-
-        String query = "UPDATE attach SET fileName=?, fileType=?, fileSize=?, fileBlob = ? WHERE attachId=? ";
-        PreparedStatement ps = conn.prepareStatement(query);
-
-        ps.setString(1, attachment.getFileName());
-        ps.setString(2, attachment.getFileType());
-        ps.setLong(3, attachment.getFileSize());
-        ps.setBlob(4, attachment.getBlob());
-        ps.setString(5, attachment.getAttachId());
-
-        int i = ps.executeUpdate();
-
-        conn.close();
-
-        if(i == 1) {
-            return true;
-        }
-
-        return false;
-    }*/
 
     public boolean deleteAttach(String postId) throws Exception {
 

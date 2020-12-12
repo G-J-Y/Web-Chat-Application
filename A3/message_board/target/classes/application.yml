@@ -1,3 +1,4 @@
+
 display:
   number: 10
 
@@ -39,3 +40,4 @@ server:
       #schema:
       # - classpath:sql/department.sql
     #- classpath:sql/employee.sql
+  port: 8888
